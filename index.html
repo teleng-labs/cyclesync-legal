@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CycleSync · Legal</title>
+<meta name="description" content="CycleSync is a private-by-default menstrual cycle wellness app for iPhone and Apple Watch. 100% on-device. Read our Privacy Policy and Terms of Use.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23c8324b' stroke-width='14' stroke-dasharray='66 198'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="/" class="brand">
+      <span class="brand-mark"></span>
+      <span class="brand-name">CycleSync <em>· legal</em></span>
+    </a>
+    <nav class="topnav">
+      <a href="/" class="active">Index</a>
+      <a href="privacy/">Privacy</a>
+      <a href="terms/">Terms</a>
+    </nav>
+  </div>
+</header>
+
+<main class="hero">
+  <div class="hero-eyebrow">Legal · v1.0 · Effective on App Store launch</div>
+  <h1>The cycle affects <em>everything.</em><br>Your data affects <em>no one.</em></h1>
+  <p class="hero-lede">
+    CycleSync is a menstrual cycle wellness app for iPhone and Apple Watch. It builds a personalized map of how <em>your</em> cycle affects <em>your</em> body — symptoms, mood, energy, sleep, biometrics — by correlating your own data on your own device. Nothing is uploaded. There is no account. There is no backend. These pages document exactly what that means.
+  </p>
+
+  <div class="doc-grid">
+    <a href="privacy/" class="doc-card">
+      <span class="doc-num">Document 01</span>
+      <span class="doc-title">Privacy <em>Policy</em></span>
+      <span class="doc-desc">What data we use, where it goes (nowhere), Apple HealthKit access, the one network exception (optional Gemma model download), and your GDPR / CCPA rights. EN · ES.</span>
+      <span class="doc-arrow">Read →</span>
+    </a>
+    <a href="terms/" class="doc-card">
+      <span class="doc-num">Document 02</span>
+      <span class="doc-title">Terms <em>of Use</em></span>
+      <span class="doc-desc">Wellness positioning (this is not a medical device), eligibility from age 13, license scope, no warranties, limitation of liability, governing law of Spain. EN · ES.</span>
+      <span class="doc-arrow">Read →</span>
+    </a>
+  </div>
+
+  <section style="margin-top:96px; max-width:720px;">
+    <div class="hero-eyebrow">What we built</div>
+    <h2 style="font-family:var(--font-display); font-weight:300; font-size:36px; line-height:1.15; letter-spacing:-0.02em; margin-bottom:18px;">
+      A personal map of <em style="color:var(--accent); font-style:italic;">your</em> cycle, not a textbook average.
+    </h2>
+    <p style="color:var(--ink-soft); font-size:17px; line-height:1.7; margin-bottom:14px;">
+      The menstrual cycle modulates energy, mood, pain, sleep, cognition, skin, digestion, and more. Generic apps tell you what a "typical" cycle looks like. CycleSync uses on-device statistics — Pearson correlations, chi-squared tests, cyclicity detection — to show what <em>yours</em> actually does. After 14 days of data, patterns start to emerge. After three cycles, the map gets sharp.
+    </p>
+    <p style="color:var(--ink-soft); font-size:17px; line-height:1.7;">
+      Entry niches are menstrual migraine, PMDD, and perimenopause, but the underlying engine works for anyone who menstruates and wants to understand how their cycle and their body relate.
+    </p>
+  </section>
+
+  <section style="margin-top:80px; max-width:720px;">
+    <div class="hero-eyebrow">Why we made these choices</div>
+    <h2 style="font-family:var(--font-display); font-weight:300; font-size:36px; line-height:1.15; letter-spacing:-0.02em; margin-bottom:18px;">
+      Cycle data is among the most sensitive there is. <em style="color:var(--accent); font-style:italic;">It belongs on your device.</em>
+    </h2>
+    <p style="color:var(--ink-soft); font-size:17px; line-height:1.7; margin-bottom:14px;">
+      Period and reproductive data have been subpoenaed, sold, and weaponized in the last several years. We took the opposite stance from the start: there is no backend that <em>could</em> hand over your data, because it never leaves your phone. No accounts. No analytics SDKs. No advertising trackers. No third-party dependencies in the production app. The app builds with only Apple frameworks and a single optional model file you choose to download.
+    </p>
+    <p style="color:var(--ink-soft); font-size:17px; line-height:1.7;">
+      Privacy here is enforced by code, not by policy. A test in our build pipeline (<code>ForbiddenAPIScanTests</code>) fails the build if anyone tries to add a network call outside the one allowed path — the optional Gemma 3 4B model download from Hugging Face, which transfers model weights only and never user data. Read the Privacy Policy for the full disclosure.
+    </p>
+  </section>
+
+  <section style="margin-top:80px; max-width:720px;">
+    <div class="hero-eyebrow">What this is not</div>
+    <h2 style="font-family:var(--font-display); font-weight:300; font-size:36px; line-height:1.15; letter-spacing:-0.02em; margin-bottom:18px;">
+      A wellness reflection tool. <em style="color:var(--accent); font-style:italic;">Not a medical device.</em>
+    </h2>
+    <p style="color:var(--ink-soft); font-size:17px; line-height:1.7;">
+      CycleSync does not diagnose, treat, prevent, monitor, or cure any condition. It surfaces patterns — observed, historical, statistical — in language like "your data suggests" and "historically, day 23 has been one of your harder days." It is intended to support reflection, not to replace medical care. If you have symptoms that worry you, talk to a healthcare professional. The Terms of Use explain the legal scope of this in detail.
+    </p>
+  </section>
+
+  <div class="phase-strip">
+    <span title="Menstrual"></span>
+    <span title="Follicular"></span>
+    <span title="Ovulation"></span>
+    <span title="Luteal"></span>
+  </div>
+  <div class="phase-legend">
+    <span>Menstrual · 1–5</span>
+    <span>Follicular · 6–13</span>
+    <span>Ovulation · 14</span>
+    <span>Luteal · 15–28</span>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>© 2026 Roberto Rojo Sahuquillo · Made in Spain</div>
+    <div>
+      <a href="privacy/">Privacy</a>
+      <a href="terms/">Terms</a>
+      <a href="mailto:rrojo.va@gmail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
