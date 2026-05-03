@@ -741,11 +741,12 @@ body { overflow-x: clip; }
 .doc-toc { animation: rise 0.7s ease both; animation-delay: 0.2s; }
 
 @media (prefers-reduced-motion: reduce) {
-  *:not(.marquee), *::before, *::after {
-    animation-duration: 0.01ms !important;
+  /* Reduce non-essential motion: long transitions and smooth scroll only.
+     Decorative animations are handled per-component (the marquee keeps
+     running because it's slow ambient motion, not vestibular-triggering). */
+  *, *::before, *::after {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  /* Marquee keeps scrolling — slow decorative motion, exempt from reduce-motion */
-  .marquee { animation-duration: 50s !important; }
+  .hero > *, .doc-header > *, .doc-body, .doc-toc { animation: none !important; }
 }
