@@ -175,6 +175,8 @@ body { overflow-x: clip; }
 /* mobile: collapse the nav into a sheet */
 .topnav-toggle {
   display: none;
+  align-items: center;
+  gap: 10px;
   background: transparent;
   border: 1px solid var(--rule);
   border-radius: 999px;
@@ -185,36 +187,54 @@ body { overflow-x: clip; }
   letter-spacing: 0.12em;
   color: var(--ink-soft);
   cursor: pointer;
+  line-height: 1;
 }
 .topnav-toggle:hover { color: var(--ink); }
+.topnav-toggle .bars {
+  display: inline-block;
+  width: 16px;
+  height: 12px;
+  position: relative;
+  flex-shrink: 0;
+}
+.topnav-toggle .bars::before,
+.topnav-toggle .bars::after,
+.topnav-toggle .bars > span {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+  border-radius: 2px;
+}
+.topnav-toggle .bars::before { top: 0; }
+.topnav-toggle .bars > span { top: 50%; transform: translateY(-50%); }
+.topnav-toggle .bars::after { bottom: 0; }
 
 @media (max-width: 800px) {
-  .topnav-toggle { display: inline-flex; align-items: center; gap: 8px; }
-  .topnav-toggle::before {
-    content: ''; width: 14px; height: 1px; background: currentColor;
-    box-shadow: 0 -4px 0 currentColor, 0 4px 0 currentColor;
-  }
+  .topnav-toggle { display: inline-flex; }
   .topnav {
     position: fixed;
-    inset: 60px 0 0 0;
+    inset: 56px 0 auto 0;
+    display: none;
     background: color-mix(in srgb, var(--paper) 96%, transparent);
     backdrop-filter: blur(20px) saturate(160%);
     -webkit-backdrop-filter: blur(20px) saturate(160%);
     flex-direction: column;
     align-items: stretch;
-    padding: 24px;
-    gap: 4px;
+    padding: 16px 24px 24px;
+    gap: 0;
     font-size: 14px;
     letter-spacing: 0.1em;
-    transform: translateY(-110%);
-    transition: transform 0.35s cubic-bezier(.2,.8,.2,1);
     z-index: 9;
     border-bottom: 1px solid var(--rule);
+    box-shadow: 0 20px 32px -16px rgba(0,0,0,0.25);
   }
-  .topnav.open { transform: translateY(0); }
+  .topnav.open { display: flex; }
   .topnav a {
-    padding: 16px 12px;
-    border-radius: 8px;
+    padding: 18px 8px;
+    border-radius: 0;
     border-bottom: 1px solid var(--rule-soft);
   }
   .topnav a:last-child { border-bottom: 0; }

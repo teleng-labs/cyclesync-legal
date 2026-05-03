@@ -145,7 +145,7 @@ TEMPLATE = """<!doctype html>
       <span class="brand-mark"></span>
       <span class="brand-name">CycleSync</span>
     </a>
-    <button class="topnav-toggle" type="button" aria-label="Menu"><span data-en="Menu" data-es="Menú">Menu</span></button>
+    <button class="topnav-toggle" type="button" aria-label="Menu"><span class="bars"><span></span></span><span data-en="Menu" data-es="Menú">Menu</span></button>
     <nav class="topnav">
       <a href="{back_root}" data-en="Home" data-es="Inicio">Home</a>
       <a href="{back_root}app/" data-en="The App" data-es="La App">The App</a>
