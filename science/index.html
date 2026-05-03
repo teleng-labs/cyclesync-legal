@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Science · CycleSync</title>
+<meta name="description" content="The menstrual cycle modulates pain, sleep, mood, cognition, and biometrics. The literature on each. The statistical engine CycleSync uses to find your patterns.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23c8324b' stroke-width='14' stroke-dasharray='66 198'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .sci-hero {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 96px 28px 48px;
+  }
+  .sci-hero h1 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin: 28px 0 24px;
+  }
+  .sci-hero h1 em { font-style: italic; color: var(--accent); }
+  .sci-hero-lede {
+    font-size: 19px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 660px;
+    font-weight: 300;
+  }
+
+  /* The big donut */
+  .cycle-donut-section {
+    max-width: 1180px;
+    margin: 64px auto;
+    padding: 0 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  @media (max-width: 860px) {
+    .cycle-donut-section { grid-template-columns: 1fr; gap: 48px; }
+  }
+  .donut-svg { width: 100%; max-width: 460px; height: auto; display: block; margin: 0 auto; }
+  .donut-side h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+    color: var(--ink);
+  }
+  .donut-side h2 em { font-style: italic; color: var(--accent); }
+  .donut-side p {
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+
+  /* Stats bar grid */
+  .stats-section {
+    max-width: 1180px;
+    margin: 64px auto;
+    padding: 0 28px;
+  }
+  .stats-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .stats-eyebrow::before {
+    content: ''; width: 24px; height: 1px;
+    background: var(--ink-faint); display: inline-block;
+  }
+  .stats-section h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(32px, 4.5vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 36px;
+    max-width: 740px;
+  }
+  .stats-section h2 em { font-style: italic; color: var(--accent); }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  @media (max-width: 860px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .stat-grid { grid-template-columns: 1fr; } }
+  .stat-cell {
+    background: var(--paper);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+  .stat-num em { font-style: italic; color: var(--accent); font-weight: 400; }
+  .stat-num .unit {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    color: var(--ink-faint);
+    letter-spacing: 0.05em;
+    margin-left: 2px;
+    font-style: normal;
+  }
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+  }
+  .stat-source {
+    font-size: 12px;
+    color: var(--ink-faint);
+    line-height: 1.4;
+    margin-top: 4px;
+  }
+
+  /* Symptom-by-phase chart */
+  .heatmap-section {
+    max-width: 1180px;
+    margin: 96px auto;
+    padding: 0 28px;
+  }
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: 180px repeat(28, 1fr);
+    gap: 2px;
+    margin-top: 24px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+  }
+  .heatmap-grid .corner { background: transparent; }
+  .heatmap-grid .day-label {
+    color: var(--ink-faint);
+    text-align: center;
+    padding: 4px 0 8px;
+    letter-spacing: 0.05em;
+    font-size: 9px;
+  }
+  .heatmap-grid .row-label {
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    padding-right: 16px;
+  }
+  .heatmap-cell {
+    aspect-ratio: 1;
+    border-radius: 2px;
+    background: var(--paper-deep);
+    transition: transform 0.15s;
+  }
+  .heatmap-cell:hover { transform: scale(1.4); z-index: 2; position: relative; }
+  .heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+  }
+  .heatmap-legend .scale {
+    display: flex;
+    gap: 2px;
+  }
+  .heatmap-legend .scale span {
+    width: 16px; height: 16px; border-radius: 2px;
+  }
+
+  /* Engine bars */
+  .engine-section {
+    max-width: 1180px;
+    margin: 96px auto;
+    padding: 0 28px;
+  }
+  .engine-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 36px;
+  }
+  @media (max-width: 860px) { .engine-grid { grid-template-columns: 1fr; } }
+  .engine-card {
+    background: var(--paper);
+    padding: 32px 28px;
+  }
+  .engine-card h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    color: var(--ink);
+  }
+  .engine-card h3 em { font-style: italic; color: var(--accent); }
+  .engine-card p {
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+
+  /* mini sparkline */
+  .sparkline-block {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .sparkline-block .label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-faint);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .sparkline-block .label .val {
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .sparkline-svg { width: 100%; height: 44px; display: block; }
+
+  /* Closing */
+  .closing {
+    max-width: 760px;
+    margin: 96px auto 0;
+    padding: 64px 28px 0;
+    text-align: center;
+  }
+  .closing h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+  .closing .links {
+    display: inline-flex;
+    gap: 4px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 4px;
+  }
+  .closing .links a {
+    padding: 10px 22px;
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    border-radius: 999px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .closing .links a:hover { background: var(--ink); color: var(--paper); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../" class="brand">
+      <span class="brand-mark"></span>
+      <span class="brand-name">CycleSync <em>· legal</em></span>
+    </a>
+    <nav class="topnav">
+      <a href="../">Index</a>
+      <a href="../app/">The App</a>
+      <a href="../science/" class="active">Science</a>
+      <a href="../privacy/">Privacy</a>
+      <a href="../terms/">Terms</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="sci-hero">
+    <div class="hero-eyebrow">The science · why this app exists</div>
+    <h1>The cycle modulates <em>almost everything.</em><br>Generic apps only show <em>almost nothing.</em></h1>
+    <p class="sci-hero-lede">
+      Forty years of literature show that the menstrual cycle systematically affects pain, sleep, cognition, mood, immune response, glucose, thermoregulation, and more. The signals are there. They're individual. They live in your data. Below: the science, the gap, and the engine that closes it.
+    </p>
+  </section>
+
+  <!-- BIG DONUT -->
+  <section class="cycle-donut-section">
+    <div>
+      <svg class="donut-svg" viewBox="-260 -260 520 520" role="img" aria-label="Cycle phase wheel">
+        <defs>
+          <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="0.6"/>
+          </filter>
+        </defs>
+        <!-- 4 arcs around a 28-day cycle. Day 1-5 menstrual, 6-13 follicular, 14 ovulation, 15-28 luteal -->
+        <!-- Each segment uses stroke-dasharray on a circle r=180, circumference ≈ 1131 -->
+        <!-- Menstrual 5/28 = 17.86%  → 202 / 929 -->
+        <!-- Follicular 8/28 = 28.57% → 323 / 808 -->
+        <!-- Ovulation 1/28 = 3.57%   → 40 / 1091 -->
+        <!-- Luteal 14/28 = 50%       → 565 / 565 -->
+        <g transform="rotate(-90)">
+          <circle r="180" fill="none" stroke="var(--rule)" stroke-width="48"/>
+          <circle r="180" fill="none" stroke="var(--menstrual)" stroke-width="48"
+                  stroke-dasharray="202 929" stroke-dashoffset="0" filter="url(#soft)"/>
+          <circle r="180" fill="none" stroke="var(--follicular)" stroke-width="48"
+                  stroke-dasharray="323 808" stroke-dashoffset="-202" filter="url(#soft)"/>
+          <circle r="180" fill="none" stroke="var(--ovulation)" stroke-width="48"
+                  stroke-dasharray="40 1091" stroke-dashoffset="-525" filter="url(#soft)"/>
+          <circle r="180" fill="none" stroke="var(--luteal)" stroke-width="48"
+                  stroke-dasharray="565 566" stroke-dashoffset="-565" filter="url(#soft)"/>
+        </g>
+
+        <!-- Labels around the wheel -->
+        <text x="0" y="-205" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--ink-soft)" letter-spacing="2">DAY 1</text>
+        <text x="200" y="6" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--ink-soft)" letter-spacing="2">14</text>
+        <text x="0" y="218" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--ink-soft)" letter-spacing="2">21</text>
+        <text x="-200" y="6" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="var(--ink-soft)" letter-spacing="2">28</text>
+
+        <!-- Center stack -->
+        <text x="0" y="-12" text-anchor="middle" font-family="Fraunces" font-style="italic" font-weight="300" font-size="56" fill="var(--ink)" letter-spacing="-2">28</text>
+        <text x="0" y="22" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="var(--ink-faint)" letter-spacing="3">DAY AVERAGE CYCLE</text>
+        <text x="0" y="48" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="var(--ink-faint)" letter-spacing="2">YOURS WILL DIFFER</text>
+
+        <!-- Tiny phase tickers -->
+        <g font-family="JetBrains Mono" font-size="9" letter-spacing="1.5">
+          <text x="-160" y="-130" fill="var(--menstrual)" text-anchor="middle">MENSTRUAL</text>
+          <text x="160" y="-130" fill="var(--follicular)" text-anchor="middle">FOLLICULAR</text>
+          <text x="190" y="40" fill="var(--ovulation)" text-anchor="middle">OVUL.</text>
+          <text x="0" y="240" fill="var(--luteal)" text-anchor="middle">LUTEAL</text>
+        </g>
+      </svg>
+    </div>
+    <div class="donut-side">
+      <div class="hero-eyebrow">A 28-day system, but <em>your</em> 28 days</div>
+      <h2>Four phases. <em>Different chemistry</em> in each.</h2>
+      <p>
+        Estradiol peaks around ovulation. Progesterone dominates the luteal phase. Both crash before bleeding starts. Each phase changes pain thresholds, REM sleep duration, working memory performance, insulin sensitivity, and core body temperature.
+      </p>
+      <p>
+        The "average" 28-day cycle doesn't exist for any single person. Your cycle could be 23 days or 35. Your luteal phase could last 9 or 16. Your ovulation could shift week to week. The map only matters when it's drawn for <em>you</em>.
+      </p>
+    </div>
+  </section>
+
+  <!-- STATS GRID -->
+  <section class="stats-section">
+    <div class="stats-eyebrow">What the literature actually says</div>
+    <h2>The cycle effect on common symptoms <em>is large, replicated, and ignored</em> by most apps.</h2>
+    <div class="stat-grid">
+      <div class="stat-cell">
+        <div class="stat-num">62<span class="unit">%</span></div>
+        <div class="stat-label">Migraine sufferers</div>
+        <div class="stat-source">Report at least one menstrual-associated attack per cycle. <em>MacGregor 2015, Cephalalgia.</em></div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">3<span class="unit">×</span></div>
+        <div class="stat-label">Migraine risk</div>
+        <div class="stat-source">In the perimenstrual window vs. mid-cycle. <em>Vetvik &amp; MacGregor 2017, Lancet Neurology.</em></div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">3–8<span class="unit">%</span></div>
+        <div class="stat-label">Of women have PMDD</div>
+        <div class="stat-source">Premenstrual Dysphoric Disorder. Severely cyclic, often missed. <em>Halbreich 2003, Psychoneuroendocrinology.</em></div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">~85<span class="unit">%</span></div>
+        <div class="stat-label">Have some PMS</div>
+        <div class="stat-source">Symptoms in the late luteal phase. <em>ACOG Practice Bulletin 2014.</em></div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">−18<span class="unit">%</span></div>
+        <div class="stat-label">REM sleep loss</div>
+        <div class="stat-source">In late luteal vs. early follicular. <em>Baker &amp; Driver 2007, Sleep Medicine Reviews.</em></div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">+0.4<span class="unit">°C</span></div>
+        <div class="stat-label">Core temperature rise</div>
+        <div class="stat-source">After ovulation, persists through luteal phase. <em>Baker et al. 2020.</em></div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">+40<span class="unit">%</span></div>
+        <div class="stat-label">Joint laxity</div>
+        <div class="stat-source">ACL injury risk peaks pre-ovulation. <em>Wojtys et al. 2002, Am J Sports Med.</em></div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">d=0.4<span class="unit"></span></div>
+        <div class="stat-label">Cognition shift</div>
+        <div class="stat-source">Effect size for spatial vs. verbal task performance across phases. <em>Sundström-Poromaa 2014.</em></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HEATMAP — symptom intensity across 28 days -->
+  <section class="heatmap-section">
+    <div class="stats-eyebrow">Example output: a personal heatmap</div>
+    <h2 style="font-family:var(--font-display);font-weight:300;font-size:clamp(28px,3.5vw,40px);line-height:1.1;letter-spacing:-0.02em;margin-bottom:8px;">
+      What 90 days of <em style="color:var(--accent);font-style:italic;">your</em> data starts to look like.
+    </h2>
+    <p style="color:var(--ink-soft); font-size:15px; line-height:1.6; max-width:680px;">
+      Six symptoms × 28 cycle days. Color intensity = average severity from your logs. Real users see patterns by day 60. Below: a synthetic example modeled on three full cycles of typical data.
+    </p>
+    <div class="heatmap-grid" id="heatmap"></div>
+    <div class="heatmap-legend">
+      <span>Low</span>
+      <div class="scale">
+        <span style="background: color-mix(in srgb, var(--menstrual) 8%, var(--paper-deep));"></span>
+        <span style="background: color-mix(in srgb, var(--menstrual) 25%, var(--paper-deep));"></span>
+        <span style="background: color-mix(in srgb, var(--menstrual) 50%, var(--paper-deep));"></span>
+        <span style="background: color-mix(in srgb, var(--menstrual) 75%, var(--paper-deep));"></span>
+        <span style="background: var(--menstrual);"></span>
+      </div>
+      <span>High</span>
+      <span style="margin-left:auto;">28 cycle days · 6 symptoms · synthetic data</span>
+    </div>
+  </section>
+
+  <!-- ENGINE — Pearson, chi-squared, cyclicity -->
+  <section class="engine-section">
+    <div class="stats-eyebrow">The statistical engine</div>
+    <h2 style="font-family:var(--font-display);font-weight:300;font-size:clamp(32px,4vw,48px);line-height:1.05;letter-spacing:-0.025em;margin-bottom:16px;max-width:740px;">
+      Three classical tests. <em style="color:var(--accent);font-style:italic;">Run on-device. Reported only when significant.</em>
+    </h2>
+    <p style="color:var(--ink-soft); font-size:16px; line-height:1.65; max-width:680px;">
+      No machine learning hype. No server inference. Just well-understood statistics, executed locally with Apple's Accelerate framework, gated at <code>p &lt; 0.05</code>, and presented in observed-pattern language.
+    </p>
+
+    <div class="engine-grid">
+      <div class="engine-card">
+        <h3>Pearson <em>r</em></h3>
+        <p>Linear correlation between two continuous signals. CycleSync uses it for biometric-vs-symptom relationships — for example, nocturnal HRV against next-day reported energy.</p>
+        <div class="sparkline-block">
+          <div class="label"><span>HRV vs. next-day energy</span><span class="val">r = +0.61</span></div>
+          <svg class="sparkline-svg" viewBox="0 0 240 44" preserveAspectRatio="none">
+            <line x1="0" y1="22" x2="240" y2="22" stroke="var(--rule)" stroke-width="0.5" stroke-dasharray="2 3"/>
+            <polyline fill="none" stroke="var(--menstrual)" stroke-width="1.5"
+              points="0,32 12,28 24,30 36,24 48,26 60,18 72,22 84,14 96,16 108,10 120,18 132,8 144,12 156,6 168,14 180,4 192,10 204,2 216,8 228,6 240,4"/>
+          </svg>
+        </div>
+      </div>
+      <div class="engine-card">
+        <h3>Chi-<em>squared</em></h3>
+        <p>Independence test for categorical pairs. Used for "does symptom X occur more often in phase Y than chance?" — for example, migraine occurrence by cycle phase.</p>
+        <div class="sparkline-block">
+          <div class="label"><span>Migraine × phase</span><span class="val">χ² p &lt; 0.001</span></div>
+          <svg class="sparkline-svg" viewBox="0 0 240 44" preserveAspectRatio="none">
+            <rect x="6" y="22" width="48" height="18" fill="var(--menstrual)" opacity="0.85"/>
+            <rect x="62" y="34" width="48" height="6" fill="var(--follicular)" opacity="0.85"/>
+            <rect x="118" y="32" width="48" height="8" fill="var(--ovulation)" opacity="0.85"/>
+            <rect x="174" y="14" width="48" height="26" fill="var(--luteal)" opacity="0.85"/>
+            <line x1="0" y1="40" x2="240" y2="40" stroke="var(--ink-faint)" stroke-width="0.5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="engine-card">
+        <h3>Cyclicity <em>test</em></h3>
+        <p>Determines whether a symptom's distribution across cycle days is significantly non-uniform. Tells you which symptoms are hormonal and which aren't — separating the cyclic from the random.</p>
+        <div class="sparkline-block">
+          <div class="label"><span>Fatigue density by day</span><span class="val">peak: d22–26</span></div>
+          <svg class="sparkline-svg" viewBox="0 0 240 44" preserveAspectRatio="none">
+            <path d="M0,40 C20,38 40,36 60,32 C80,28 100,28 120,30 C140,32 160,28 180,16 C200,4 210,2 220,4 C230,6 235,12 240,22 L240,44 L0,44 Z"
+                  fill="var(--accent)" opacity="0.18"/>
+            <path d="M0,40 C20,38 40,36 60,32 C80,28 100,28 120,30 C140,32 160,28 180,16 C200,4 210,2 220,4 C230,6 235,12 240,22"
+                  fill="none" stroke="var(--accent)" stroke-width="1.5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACY DONUT -->
+  <section class="cycle-donut-section" style="margin-top: 96px;">
+    <div class="donut-side">
+      <div class="hero-eyebrow">Why on-device matters</div>
+      <h2>Of every byte the app processes, <em>~99% never leaves the phone.</em></h2>
+      <p>
+        The single network exception is the optional Gemma 3 4B model download — model weights only, one-time, opt-in. No cycle log, no symptom, no HealthKit reading, no AI prompt or response is ever sent over the network. The architecture is enforced by a build-time test that fails CI if anyone tries to add a network call outside that one allowed path.
+      </p>
+      <p>
+        Wellness apps have been subpoenaed. Period data has been sold. The simplest defense is to not have the data on a server in the first place.
+      </p>
+    </div>
+    <div>
+      <svg class="donut-svg" viewBox="-260 -260 520 520" role="img" aria-label="On-device vs network">
+        <g transform="rotate(-90)">
+          <!-- 99% on-device, 1% gemma model download exception -->
+          <circle r="180" fill="none" stroke="var(--rule)" stroke-width="48"/>
+          <circle r="180" fill="none" stroke="var(--ovulation)" stroke-width="48"
+                  stroke-dasharray="1120 11" stroke-dashoffset="0"/>
+          <circle r="180" fill="none" stroke="var(--menstrual)" stroke-width="48"
+                  stroke-dasharray="11 1120" stroke-dashoffset="-1120"/>
+        </g>
+        <text x="0" y="-12" text-anchor="middle" font-family="Fraunces" font-style="italic" font-weight="300" font-size="56" fill="var(--ink)" letter-spacing="-2">99<tspan font-size="36">%</tspan></text>
+        <text x="0" y="22" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="var(--ink-faint)" letter-spacing="3">STAYS ON DEVICE</text>
+        <text x="0" y="48" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="var(--ink-faint)" letter-spacing="2">FOREVER</text>
+
+        <g font-family="JetBrains Mono" font-size="10" letter-spacing="1.5">
+          <text x="0" y="-218" fill="var(--ovulation)" text-anchor="middle">YOUR DATA · 100%</text>
+          <text x="0" y="232" fill="var(--menstrual)" text-anchor="middle">GEMMA MODEL · 1%, OPT-IN, ONCE</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <section class="closing">
+    <h2>"The cycle has been studied for forty years. <br>Almost nobody has shown <em>you</em> what it does in <em>your</em> body."</h2>
+    <div class="links">
+      <a href="../app/">See the app</a>
+      <a href="../privacy/">Privacy commitments</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>&copy; 2026 Roberto Rojo Sahuquillo &middot; Made in Spain</div>
+    <div>
+      <a href="../">Index</a>
+      <a href="../app/">The App</a>
+      <a href="../privacy/">Privacy</a>
+      <a href="../terms/">Terms</a>
+      <a href="mailto:rrojo.va@gmail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Build the synthetic heatmap (6 symptoms × 28 days) — illustrative pattern
+  (function(){
+    const root = document.getElementById('heatmap');
+    if (!root) return;
+    const rows = [
+      { name: 'Migraine',   color: 'var(--menstrual)',   curve: d => d <= 3 ? 0.85 - d*0.1 : (d >= 26 ? 0.6 + (d-26)*0.15 : 0.05 + Math.random()*0.08) },
+      { name: 'Energy',     color: 'var(--ovulation)',   curve: d => 0.4 + 0.5 * Math.sin((d-1)/28 * Math.PI * 2 - Math.PI/2 + 0.6) },
+      { name: 'Mood (low)', color: 'var(--luteal)',       curve: d => d >= 22 ? 0.4 + (d-22)*0.1 : (d <= 4 ? 0.5 - d*0.08 : 0.1 + Math.random()*0.1) },
+      { name: 'Sleep dis.', color: 'var(--luteal)',       curve: d => d >= 24 ? 0.5 + (d-24)*0.1 : (d <= 3 ? 0.4 : 0.15 + Math.random()*0.1) },
+      { name: 'Pain (cramp)',color: 'var(--menstrual)',   curve: d => d <= 4 ? 0.9 - d*0.18 : 0.05 + Math.random()*0.06 },
+      { name: 'Cognition',  color: 'var(--follicular)',  curve: d => d >= 9 && d <= 16 ? 0.75 + Math.random()*0.1 : 0.35 + Math.random()*0.1 },
+    ];
+
+    // Header row
+    const corner = document.createElement('div'); corner.className='corner'; root.appendChild(corner);
+    for (let d = 1; d <= 28; d++) {
+      const el = document.createElement('div');
+      el.className = 'day-label';
+      el.textContent = (d === 1 || d === 7 || d === 14 || d === 21 || d === 28) ? d : '';
+      root.appendChild(el);
+    }
+    // Rows
+    rows.forEach(r => {
+      const lbl = document.createElement('div');
+      lbl.className = 'row-label';
+      lbl.textContent = r.name;
+      root.appendChild(lbl);
+      for (let d = 1; d <= 28; d++) {
+        const v = Math.max(0, Math.min(1, r.curve(d)));
+        const cell = document.createElement('div');
+        cell.className = 'heatmap-cell';
+        const pct = Math.round(8 + v * 88);
+        cell.style.background = `color-mix(in srgb, ${r.color} ${pct}%, var(--paper-deep))`;
+        cell.title = `${r.name} · day ${d} · ${(v*10).toFixed(1)}/10`;
+        root.appendChild(cell);
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>

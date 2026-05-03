@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The App · CycleSync</title>
+<meta name="description" content="A visual tour of CycleSync — a private-by-default menstrual cycle wellness app for iPhone and Apple Watch. Home, Cycle Map, Forecast, Insights, Settings.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23c8324b' stroke-width='14' stroke-dasharray='66 198'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  /* page-local layout for the gallery */
+  .app-hero {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 96px 28px 48px;
+  }
+  .app-hero h1 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(44px, 6vw, 80px);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin: 28px 0 28px;
+  }
+  .app-hero h1 em { font-style: italic; color: var(--accent); }
+  .app-hero-lede {
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 660px;
+    font-weight: 300;
+  }
+
+  /* Each screen block: text + device frame side-by-side, alternating */
+  .screen-block {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 80px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .screen-block.reverse .screen-text { order: 2; }
+  .screen-block.reverse .screen-device { order: 1; }
+  @media (max-width: 860px) {
+    .screen-block, .screen-block.reverse {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 48px 28px;
+    }
+    .screen-block.reverse .screen-text,
+    .screen-block.reverse .screen-device { order: unset; }
+  }
+  .screen-text { max-width: 480px; }
+  .screen-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .screen-num::before {
+    content: '';
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--phase, var(--accent));
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--phase, var(--accent)) 18%, transparent);
+  }
+  .screen-text h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+    color: var(--ink);
+  }
+  .screen-text h2 em { font-style: italic; color: var(--phase, var(--accent)); }
+  .screen-text p {
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1.65;
+    margin-bottom: 12px;
+  }
+  .screen-text .feature-list {
+    list-style: none;
+    margin-top: 20px;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .screen-text .feature-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .screen-text .feature-list li span:last-child {
+    color: var(--ink-faint);
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: var(--font-body);
+    font-size: 13px;
+    text-align: right;
+  }
+
+  /* iPhone-ish bezel — generated entirely with CSS, no asset dependency */
+  .screen-device {
+    display: flex;
+    justify-content: center;
+    perspective: 1800px;
+  }
+  .device-frame {
+    --w: 280px;
+    width: var(--w);
+    aspect-ratio: 1179 / 2556;
+    background: #0b0b0d;
+    border-radius: 44px;
+    padding: 10px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.08) inset,
+      0 0 0 1px rgba(0,0,0,0.6),
+      0 30px 60px -20px rgba(0,0,0,0.45),
+      0 12px 24px -10px rgba(0,0,0,0.35);
+    position: relative;
+    transform: rotateY(-6deg) rotateX(2deg);
+    transition: transform 0.6s cubic-bezier(.2,.8,.2,1);
+  }
+  .screen-block.reverse .device-frame {
+    transform: rotateY(6deg) rotateX(2deg);
+  }
+  .device-frame:hover { transform: rotateY(0) rotateX(0) translateY(-4px); }
+  .device-frame::before {
+    content: '';
+    position: absolute;
+    top: 12px; left: 50%;
+    transform: translateX(-50%);
+    width: 110px; height: 28px;
+    background: #000;
+    border-radius: 999px;
+    z-index: 2;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.04) inset;
+  }
+  .device-frame img {
+    width: 100%;
+    height: 100%;
+    border-radius: 36px;
+    display: block;
+    object-fit: cover;
+  }
+  @media (max-width: 600px) {
+    .device-frame { --w: 220px; }
+  }
+
+  /* Section dividers */
+  .section-divider {
+    max-width: 1080px;
+    margin: 32px auto;
+    padding: 0 28px;
+  }
+  .section-divider .rule {
+    height: 1px;
+    background: linear-gradient(to right,
+      transparent,
+      var(--rule) 20%,
+      var(--rule) 80%,
+      transparent);
+  }
+
+  /* Closing card */
+  .closing {
+    max-width: 760px;
+    margin: 80px auto 0;
+    padding: 60px 28px 0;
+    text-align: center;
+  }
+  .closing h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 28px;
+  }
+  .closing .links {
+    display: inline-flex;
+    gap: 4px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 4px;
+  }
+  .closing .links a {
+    padding: 10px 22px;
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    border-radius: 999px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .closing .links a:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../" class="brand">
+      <span class="brand-mark"></span>
+      <span class="brand-name">CycleSync <em>· legal</em></span>
+    </a>
+    <nav class="topnav">
+      <a href="../">Index</a>
+      <a href="../app/" class="active">The App</a>
+      <a href="../science/">Science</a>
+      <a href="../privacy/">Privacy</a>
+      <a href="../terms/">Terms</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="app-hero">
+    <div class="hero-eyebrow">A visual tour · iPhone &amp; Apple Watch</div>
+    <h1>Five screens. <em>One body.</em><br>A map that learns from you.</h1>
+    <p class="app-hero-lede">
+      CycleSync is built around five primary surfaces. Each one is on-device, each one is built from your own data, and each one speaks in observed-pattern language — never in medical certainty. Below are the screens themselves, light and dark, in the colors of the cycle.
+    </p>
+  </section>
+
+  <div class="section-divider"><div class="rule"></div></div>
+
+  <!-- 01 HOME -->
+  <section class="screen-block" style="--phase: var(--menstrual);">
+    <div class="screen-text">
+      <div class="screen-num">01 · Home</div>
+      <h2>Where you are <em>today</em>.</h2>
+      <p>
+        The Home screen tells you where you are in your cycle right now and what your data has learned about days like today. Cycle Vitality summarises the four signals that matter most — phase, energy capacity, expected difficulty, and biometric trend.
+      </p>
+      <p>
+        Everything below the fold is contextual: what historically happens on this cycle day for <em>you</em>, not for a population average.
+      </p>
+      <ul class="feature-list">
+        <li><span>Phase</span><span>Live, computed from cycle history</span></li>
+        <li><span>Vitality</span><span>4-axis snapshot of today</span></li>
+        <li><span>Quick log</span><span>Symptoms, energy, mood</span></li>
+      </ul>
+    </div>
+    <div class="screen-device">
+      <div class="device-frame"><img src="../assets/screens/home-light.png" alt="CycleSync Home screen, light mode" loading="lazy"></div>
+    </div>
+  </section>
+
+  <div class="section-divider"><div class="rule"></div></div>
+
+  <!-- 02 CYCLE MAP -->
+  <section class="screen-block reverse" style="--phase: var(--follicular);">
+    <div class="screen-text">
+      <div class="screen-num">02 · Cycle Map</div>
+      <h2>Your cycle, <em>not the average one.</em></h2>
+      <p>
+        The differentiating feature. A personalised visualisation of how each symptom you track distributes across your phases. Per-phase severity, peak cycle days, biometric overlays — built from your own logs.
+      </p>
+      <p>
+        After three cycles, the map gets sharp. After six, it's a tool that no generic period app can match, because no generic period app sees <em>your</em> body.
+      </p>
+      <ul class="feature-list">
+        <li><span>Engine</span><span>Pearson r &middot; Chi-squared</span></li>
+        <li><span>Cyclicity test</span><span>Is this symptom hormonal?</span></li>
+        <li><span>Min data</span><span>14 days &middot; ideally 3 cycles</span></li>
+      </ul>
+    </div>
+    <div class="screen-device">
+      <div class="device-frame"><img src="../assets/screens/cyclemap-dark.png" alt="CycleSync Cycle Map, dark mode" loading="lazy"></div>
+    </div>
+  </section>
+
+  <div class="section-divider"><div class="rule"></div></div>
+
+  <!-- 03 FORECAST -->
+  <section class="screen-block" style="--phase: var(--ovulation);">
+    <div class="screen-text">
+      <div class="screen-num">03 · Forecast</div>
+      <h2>What today <em>has historically been</em>.</h2>
+      <p>
+        Replaces the old "risk score" idea. The Forecast tells you — in plain language — what cycle day you're on, what your historical pattern looks like for that day, and what symptoms are most likely to appear if any.
+      </p>
+      <p>
+        Phrasing is always observed-pattern. Never "you will have a migraine." Always "Day 23 has historically been one of your harder days."
+      </p>
+      <ul class="feature-list">
+        <li><span>Difficulty</span><span>low &middot; elevated &middot; high</span></li>
+        <li><span>Top symptoms</span><span>Ranked by historical likelihood</span></li>
+        <li><span>Voice</span><span>Reflective, not predictive</span></li>
+      </ul>
+    </div>
+    <div class="screen-device">
+      <div class="device-frame"><img src="../assets/screens/forecast-light.png" alt="CycleSync Forecast, light mode" loading="lazy"></div>
+    </div>
+  </section>
+
+  <div class="section-divider"><div class="rule"></div></div>
+
+  <!-- 04 INSIGHTS -->
+  <section class="screen-block reverse" style="--phase: var(--luteal);">
+    <div class="screen-text">
+      <div class="screen-num">04 · Insights</div>
+      <h2>Patterns you couldn't see <em>by hand.</em></h2>
+      <p>
+        Insights are statistically validated correlations the engine surfaces only when they pass a significance test (p &lt; 0.05). Examples: "Your nocturnal HRV drops noticeably on luteal days" or "Your migraines correlate strongly with day-22 of your cycle."
+      </p>
+      <p>
+        Nothing speculative. If the data isn't there, the engine stays quiet. Better silence than false signal.
+      </p>
+      <ul class="feature-list">
+        <li><span>Threshold</span><span>p &lt; 0.05, minimum 14 days</span></li>
+        <li><span>Tone</span><span>"Your data suggests…"</span></li>
+        <li><span>Failure mode</span><span>Silence beats noise</span></li>
+      </ul>
+    </div>
+    <div class="screen-device">
+      <div class="device-frame"><img src="../assets/screens/insights-dark.png" alt="CycleSync Insights, dark mode" loading="lazy"></div>
+    </div>
+  </section>
+
+  <div class="section-divider"><div class="rule"></div></div>
+
+  <!-- 05 SETTINGS -->
+  <section class="screen-block" style="--phase: var(--menstrual);">
+    <div class="screen-text">
+      <div class="screen-num">05 · Settings</div>
+      <h2>What you control. <em>All of it.</em></h2>
+      <p>
+        Every permission, every export, every model. HealthKit access lives here (read-only, revocable from iOS Settings any time). The optional Gemma model download lives here too — opt-in, one-time, model weights only.
+      </p>
+      <p>
+        There is no account to sign into. There is no setting that turns telemetry "off" — there is no telemetry to begin with. The Settings screen is where you remove your data, not where you ask permission to be left alone.
+      </p>
+      <ul class="feature-list">
+        <li><span>HealthKit</span><span>Read-only, revocable</span></li>
+        <li><span>Gemma model</span><span>Opt-in, ~4.1 GB, one-time</span></li>
+        <li><span>Export</span><span>PDF on-device only</span></li>
+      </ul>
+    </div>
+    <div class="screen-device">
+      <div class="device-frame"><img src="../assets/screens/settings-light.png" alt="CycleSync Settings, light mode" loading="lazy"></div>
+    </div>
+  </section>
+
+  <div class="phase-strip" style="max-width: 1080px; margin: 80px auto 0;">
+    <span title="Menstrual"></span>
+    <span title="Follicular"></span>
+    <span title="Ovulation"></span>
+    <span title="Luteal"></span>
+  </div>
+  <div class="phase-legend" style="max-width: 1080px; margin: 12px auto 0; padding: 0 28px;">
+    <span>Menstrual · 1–5</span>
+    <span>Follicular · 6–13</span>
+    <span>Ovulation · 14</span>
+    <span>Luteal · 15–28</span>
+  </div>
+
+  <section class="closing">
+    <h2>"Your data stays on your device. <br>The patterns it draws stay between you and yourself."</h2>
+    <div class="links">
+      <a href="../privacy/">Read the Privacy Policy</a>
+      <a href="../terms/">Read the Terms</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>&copy; 2026 Roberto Rojo Sahuquillo &middot; Made in Spain</div>
+    <div>
+      <a href="../">Index</a>
+      <a href="../privacy/">Privacy</a>
+      <a href="../terms/">Terms</a>
+      <a href="mailto:rrojo.va@gmail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

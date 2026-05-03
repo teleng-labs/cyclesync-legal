@@ -129,6 +129,8 @@ TEMPLATE = """<!doctype html>
     </a>
     <nav class="topnav">
       <a href="{back_root}">Index</a>
+      <a href="{back_root}app/">The App</a>
+      <a href="{back_root}science/">Science</a>
       <a href="{back_root}privacy/" {privacy_active}>Privacy</a>
       <a href="{back_root}terms/" {terms_active}>Terms</a>
     </nav>
