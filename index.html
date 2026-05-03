@@ -72,12 +72,18 @@
     font-family: var(--font-display);
     font-weight: 300;
     font-variation-settings: 'opsz' 144;
-    font-size: clamp(56px, 11vw, 168px);
-    line-height: 0.92;
-    letter-spacing: -0.04em;
+    font-size: clamp(44px, 9vw, 168px);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
     color: var(--ink);
     margin: 0;
     max-width: 18ch;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  @media (max-width: 600px) {
+    .headline { font-size: clamp(40px, 11vw, 60px); line-height: 1.0; max-width: 100%; }
   }
   .headline .word {
     display: inline-block;
@@ -219,6 +225,8 @@
   .triple-stat .ts {
     padding: 32px 24px;
     border-right: 1px solid var(--rule);
+    min-width: 0;
+    overflow-wrap: break-word;
   }
   .triple-stat .ts:last-child { border-right: 0; }
   @media (max-width: 860px) {
@@ -229,11 +237,14 @@
     font-family: var(--font-display);
     font-style: italic;
     font-weight: 300;
-    font-size: clamp(72px, 9vw, 132px);
-    line-height: 1;
+    font-size: clamp(64px, 8vw, 120px);
+    line-height: 1.15;
     letter-spacing: -0.04em;
     color: var(--ink);
     margin-bottom: 16px;
+    padding-top: 0.12em;
+    overflow: visible;
+    word-break: normal;
   }
   .triple-stat .ts-num em {
     background: linear-gradient(135deg, var(--menstrual), var(--follicular) 60%, var(--luteal));
@@ -505,6 +516,7 @@
       <span class="brand-mark"></span>
       <span class="brand-name">CycleSync</span>
     </a>
+    <button class="topnav-toggle" type="button" aria-label="Menu"><span data-en="Menu" data-es="Menú">Menu</span></button>
     <nav class="topnav">
       <a href="./" class="active" data-en="Home" data-es="Inicio">Home</a>
       <a href="app/" data-en="The App" data-es="La App">The App</a>

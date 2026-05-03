@@ -75,3 +75,36 @@
     init();
   }
 })();
+
+/* Mobile nav toggle. Looks for .topnav-toggle and .topnav, adds 'open' class. */
+(function () {
+  function init() {
+    const btn = document.querySelector('.topnav-toggle');
+    const nav = document.querySelector('.topnav');
+    if (!btn || !nav) return;
+    btn.setAttribute('aria-controls', 'site-nav');
+    btn.setAttribute('aria-expanded', 'false');
+    nav.id = 'site-nav';
+    btn.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    nav.querySelectorAll('a').forEach((a) => {
+      a.addEventListener('click', () => {
+        nav.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      });
+    });
+    document.addEventListener('click', (e) => {
+      if (!nav.classList.contains('open')) return;
+      if (nav.contains(e.target) || btn.contains(e.target)) return;
+      nav.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();

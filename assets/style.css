@@ -87,6 +87,10 @@ body::before {
 
 main, header, footer { position: relative; z-index: 2; }
 
+/* ─── Defensive overflow control (mobile) ─── */
+html, body { max-width: 100%; }
+body { overflow-x: clip; }
+
 /* ─── Top bar ─── */
 .topbar {
   position: sticky;
@@ -166,6 +170,54 @@ main, header, footer { position: relative; z-index: 2; }
 .topnav a.active {
   color: var(--ink);
   background: var(--rule-soft);
+}
+
+/* mobile: collapse the nav into a sheet */
+.topnav-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.topnav-toggle:hover { color: var(--ink); }
+
+@media (max-width: 800px) {
+  .topnav-toggle { display: inline-flex; align-items: center; gap: 8px; }
+  .topnav-toggle::before {
+    content: ''; width: 14px; height: 1px; background: currentColor;
+    box-shadow: 0 -4px 0 currentColor, 0 4px 0 currentColor;
+  }
+  .topnav {
+    position: fixed;
+    inset: 60px 0 0 0;
+    background: color-mix(in srgb, var(--paper) 96%, transparent);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 24px;
+    gap: 4px;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    transform: translateY(-110%);
+    transition: transform 0.35s cubic-bezier(.2,.8,.2,1);
+    z-index: 9;
+    border-bottom: 1px solid var(--rule);
+  }
+  .topnav.open { transform: translateY(0); }
+  .topnav a {
+    padding: 16px 12px;
+    border-radius: 8px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .topnav a:last-child { border-bottom: 0; }
 }
 
 /* ─── Hero (index only) ─── */
@@ -613,8 +665,16 @@ main, header, footer { position: relative; z-index: 2; }
 .lang-switch button:hover { color: var(--ink); }
 .lang-switch button.active { color: var(--accent); font-weight: 500; }
 .lang-switch .sep { color: var(--ink-faint); opacity: 0.5; }
-@media (max-width: 480px) {
-  .lang-switch { bottom: 16px; right: 16px; padding: 6px 10px; font-size: 10px; }
+@media (max-width: 800px) {
+  .lang-switch {
+    bottom: 14px;
+    right: auto;
+    left: 14px;
+    padding: 6px 12px;
+    font-size: 10px;
+    box-shadow: 0 6px 16px -8px rgba(0,0,0,0.2);
+  }
+  .lang-switch button { padding: 3px 6px; }
 }
 
 /* selection */
