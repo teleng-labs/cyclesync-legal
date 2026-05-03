@@ -3,10 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Privacy Policy · CycleSync</title>
-<meta name="description" content="CycleSync Privacy Policy. 100% on-device wellness app. No backend, no accounts, no analytics, no tracking.">
+<title data-en="Privacy Policy · CycleSync" data-es="Política de Privacidad · CycleSync">Privacy Policy · CycleSync</title>
+<meta name="description"
+      data-i18n-attr="content"
+      data-content-en="CycleSync Privacy Policy. 100% on-device wellness app. No backend, no accounts, no analytics, no tracking."
+      data-content-es="Política de Privacidad de CycleSync. App de bienestar 100% en el dispositivo. Sin backend, sin cuentas, sin analítica, sin tracking."
+      content="CycleSync Privacy Policy. 100% on-device wellness app. No backend, no accounts, no analytics, no tracking.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23c8324b' stroke-width='14' stroke-dasharray='66 198'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="../assets/style.css">
+<style>
+  /* Hide whichever language is not active. The global toggle sets <html lang>. */
+  html[lang="en"] [data-lang-section="es"] { display: none; }
+  html[lang="es"] [data-lang-section="en"] { display: none; }
+</style>
 </head>
 <body>
 
@@ -14,14 +23,14 @@
   <div class="topbar-inner">
     <a href="../" class="brand">
       <span class="brand-mark"></span>
-      <span class="brand-name">CycleSync <em>· legal</em></span>
+      <span class="brand-name">CycleSync</span>
     </a>
     <nav class="topnav">
-      <a href="../">Index</a>
-      <a href="../app/">The App</a>
-      <a href="../science/">Science</a>
-      <a href="../privacy/" class="active">Privacy</a>
-      <a href="../terms/" >Terms</a>
+      <a href="../" data-en="Home" data-es="Inicio">Home</a>
+      <a href="../app/" data-en="The App" data-es="La App">The App</a>
+      <a href="../science/" data-en="Science" data-es="Ciencia">Science</a>
+      <a href="../privacy/" class="active" data-en="Privacy" data-es="Privacidad">Privacy</a>
+      <a href="../terms/"  data-en="Terms" data-es="Términos">Terms</a>
     </nav>
   </div>
 </header>
@@ -29,23 +38,18 @@
 <main class="doc-shell">
   <div class="doc-header">
     <div class="doc-header-left">
-      <div class="doc-kicker">Document 01 · Effective on App Store launch</div>
-      <h1 class="doc-h1" id="doc-title-en">Privacy <em>Policy</em></h1>
-      <h1 class="doc-h1" id="doc-title-es" style="display:none;">Pol&iacute;tica de <em>Privacidad</em></h1>
-      <div class="lang-tabs" role="tablist">
-        <button data-lang="en" class="active" role="tab">English</button>
-        <button data-lang="es" role="tab">Espa&ntilde;ol</button>
-      </div>
+      <div class="doc-kicker" data-en="Document 01 · Effective on App Store launch" data-es="Documento 01 · Vigente desde el lanzamiento en App Store">Document 01 · Effective on App Store launch</div>
+      <h1 class="doc-h1" data-en="Privacy <em>Policy</em>" data-es="Pol&iacute;tica de <em>Privacidad</em>">Privacy <em>Policy</em></h1>
     </div>
     <div class="doc-meta">
       <strong>CycleSync</strong> · v1.0<br>
-      Roberto Rojo Sahuquillo<br>
-      Madrid &middot; Spain
+      Forge Labs<br>
+      <span data-en="Alicante · Spain" data-es="Alicante · España">Alicante · Spain</span>
     </div>
   </div>
 
   <aside class="doc-toc" aria-label="Table of contents">
-    <div data-lang-block="en">
+    <div data-lang-section="en">
       <h4>On this page</h4>
       <ol>
 <li><a href="#en-1">What this is</a></li>
@@ -62,8 +66,8 @@
 <li><a href="#en-12">Effective date</a></li>
 </ol>
     </div>
-    <div data-lang-block="es" style="display:none;">
-      <h4>En esta p&aacute;gina</h4>
+    <div data-lang-section="es">
+      <h4>En esta página</h4>
       <ol>
 <li><a href="#es-1">Qué es esto</a></li>
 <li><a href="#es-2">Qué datos usamos</a></li>
@@ -82,7 +86,7 @@
   </aside>
 
   <article class="doc-body">
-    <section class="lang-section active" data-lang="en">
+    <section data-lang-section="en">
       <h3 id="en-1"><span class="num">01</span><span>What this is</span></h3>
 <p>CycleSync is a menstrual cycle wellness app for iPhone and Apple Watch. This Privacy Policy explains what data CycleSync uses, how it is processed, and what choices you have.</p>
 <p>CycleSync is designed to be private by default. The app does not require an account, does not run a backend service, does not upload your cycle data to our servers, and does not use analytics, advertising trackers, or third-party tracking SDKs.</p>
@@ -155,7 +159,7 @@
 <h3 id="en-12"><span class="num">12</span><span>Effective date</span></h3>
 <p>Effective date: [TBD: insert effective date]</p>
     </section>
-    <section class="lang-section" data-lang="es">
+    <section data-lang-section="es">
       <h3 id="es-1"><span class="num">01</span><span>Qué es esto</span></h3>
 <p>CycleSync es una app de bienestar para iPhone y Apple Watch orientada al seguimiento del ciclo menstrual. Esta Política de Privacidad explica qué datos usa CycleSync, cómo se procesan y qué opciones tienes.</p>
 <p>CycleSync está diseñada con privacidad por defecto. La app no requiere cuenta, no usa backend propio, no sube tus datos de ciclo a servidores de CycleSync y no incluye analítica, publicidad ni SDKs de tracking de terceros.</p>
@@ -233,37 +237,20 @@
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div>&copy; 2026 Roberto Rojo Sahuquillo &middot; Made in Spain</div>
+    <div data-en="© 2026 Forge Labs · Crafted in Alicante, Spain"
+         data-es="© 2026 Forge Labs · Hecho en Alicante, España">© 2026 Forge Labs · Crafted in Alicante, Spain</div>
     <div>
-      <a href="../privacy/">Privacy</a>
-      <a href="../terms/">Terms</a>
-      <a href="mailto:rrojo.va@gmail.com">Contact</a>
+      <a href="../" data-en="Home" data-es="Inicio">Home</a>
+      <a href="../app/" data-en="The App" data-es="La App">The App</a>
+      <a href="../science/" data-en="Science" data-es="Ciencia">Science</a>
+      <a href="../privacy/" data-en="Privacy" data-es="Privacidad">Privacy</a>
+      <a href="../terms/" data-en="Terms" data-es="Términos">Terms</a>
+      <a href="mailto:rrojo.va@gmail.com" data-en="Contact" data-es="Contacto">Contact</a>
     </div>
   </div>
 </footer>
 
-<script>
-  (function () {
-    const tabs = document.querySelectorAll('.lang-tabs button');
-    const sections = document.querySelectorAll('.lang-section');
-    const tocBlocks = document.querySelectorAll('[data-lang-block]');
-    const titleEN = document.getElementById('doc-title-en');
-    const titleES = document.getElementById('doc-title-es');
-    function setLang(l) {
-      tabs.forEach(t => t.classList.toggle('active', t.dataset.lang === l));
-      sections.forEach(s => s.classList.toggle('active', s.dataset.lang === l));
-      tocBlocks.forEach(b => b.style.display = b.dataset.langBlock === l ? '' : 'none');
-      titleEN.style.display = l === 'en' ? '' : 'none';
-      titleES.style.display = l === 'es' ? '' : 'none';
-      document.documentElement.lang = l;
-      try { localStorage.setItem('cs-legal-lang', l); } catch (e) {}
-    }
-    tabs.forEach(t => t.addEventListener('click', () => setLang(t.dataset.lang)));
-    let saved = 'en';
-    try { saved = localStorage.getItem('cs-legal-lang') || (navigator.language.startsWith('es') ? 'es' : 'en'); } catch (e) {}
-    setLang(saved);
-  })();
-</script>
+<script src="../assets/i18n.js"></script>
 
 </body>
 </html>

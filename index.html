@@ -3,111 +3,834 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CycleSync · Legal</title>
-<meta name="description" content="CycleSync is a private-by-default menstrual cycle wellness app for iPhone and Apple Watch. 100% on-device. Read our Privacy Policy and Terms of Use.">
+<title data-en="CycleSync — Understand your body through your cycle"
+       data-es="CycleSync — Entiende tu cuerpo a través de tu ciclo">CycleSync — Understand your body through your cycle</title>
+<meta name="description"
+      data-i18n-attr="content"
+      data-content-en="A personal map of how your menstrual cycle affects your body. On-device statistics, Apple Watch integration, no cloud. By Forge Labs."
+      data-content-es="Un mapa personal de cómo tu ciclo menstrual afecta a tu cuerpo. Estadística en el dispositivo, Apple Watch, sin nube. De Forge Labs."
+      content="A personal map of how your menstrual cycle affects your body. On-device statistics, Apple Watch integration, no cloud. By Forge Labs.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23c8324b' stroke-width='14' stroke-dasharray='66 198'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css">
+<style>
+  /* ─── Cinematic hero ─── */
+  .cinema {
+    position: relative;
+    min-height: min(100vh, 920px);
+    padding: 120px 28px 80px;
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    overflow: hidden;
+  }
+
+  /* huge gradient mesh that follows the cursor */
+  .cinema::before {
+    content: '';
+    position: absolute;
+    inset: -100px;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 700px 500px at var(--mx, 30%) var(--my, 20%), rgba(200, 50, 75, 0.18), transparent 60%),
+      radial-gradient(ellipse 500px 400px at calc(100% - var(--mx, 30%)) 60%, rgba(217, 142, 58, 0.14), transparent 60%),
+      radial-gradient(ellipse 600px 400px at 80% 100%, rgba(107, 77, 138, 0.18), transparent 65%);
+    z-index: 0;
+    transition: background-position 0.4s;
+  }
+  .cinema > * { position: relative; z-index: 1; }
+
+  .eyebrow-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 56px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+  .eyebrow-wrap .left { display: flex; align-items: center; gap: 12px; }
+  .eyebrow-wrap .left::before {
+    content: ''; width: 28px; height: 1px; background: var(--ink-faint);
+  }
+  .eyebrow-wrap .right .pulse {
+    display: inline-block; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--ovulation);
+    margin-right: 8px; animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ovulation) 60%, transparent); }
+    50% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--ovulation) 0%, transparent); }
+  }
+
+  /* The headline: mixed serif + italic, variable optical size. */
+  .headline {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-variation-settings: 'opsz' 144;
+    font-size: clamp(56px, 11vw, 168px);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    margin: 0;
+    max-width: 18ch;
+  }
+  .headline .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.5em);
+    animation: rise-word 0.9s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  .headline em {
+    font-style: italic;
+    font-weight: 400;
+    background: linear-gradient(135deg, var(--menstrual), var(--follicular) 60%, var(--luteal));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  .headline .stroke {
+    -webkit-text-stroke: 1.5px var(--ink);
+    color: transparent;
+    font-style: italic;
+    font-weight: 300;
+  }
+  @media (prefers-color-scheme: dark) {
+    .headline .stroke { -webkit-text-stroke-color: var(--ink); }
+  }
+
+  @keyframes rise-word {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .sub-row {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 64px;
+    margin-top: 56px;
+    align-items: end;
+  }
+  @media (max-width: 860px) {
+    .sub-row { grid-template-columns: 1fr; gap: 32px; }
+  }
+  .sub-lede {
+    font-size: clamp(18px, 1.7vw, 22px);
+    line-height: 1.5;
+    color: var(--ink-soft);
+    font-weight: 300;
+    max-width: 640px;
+  }
+  .sub-lede em {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--ink);
+    font-weight: 400;
+  }
+
+  .hero-cta-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-end;
+  }
+  @media (max-width: 860px) { .hero-cta-stack { align-items: flex-start; } }
+  .hero-cta-row {
+    display: inline-flex;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 4px;
+    background: color-mix(in srgb, var(--paper) 80%, transparent);
+    backdrop-filter: blur(8px);
+  }
+  .hero-cta-row a {
+    padding: 14px 24px;
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-soft);
+    border-radius: 999px;
+    transition: background 0.25s, color 0.25s;
+  }
+  .hero-cta-row a.primary {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .hero-cta-row a:hover { background: var(--accent); color: var(--paper); }
+
+  .hero-meta-min {
+    display: flex;
+    gap: 24px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+  }
+  .hero-meta-min strong { color: var(--ink); font-weight: 500; }
+
+  /* Marquee strip below hero — moving phase ribbon */
+  .marquee-section {
+    margin-top: 80px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    overflow: hidden;
+    padding: 24px 0;
+    background: var(--paper-deep);
+  }
+  .marquee {
+    display: flex;
+    gap: 64px;
+    white-space: nowrap;
+    animation: scroll 50s linear infinite;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(28px, 4vw, 56px);
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .marquee span { display: inline-flex; align-items: center; gap: 24px; }
+  .marquee span::after {
+    content: '·';
+    color: var(--accent);
+    font-style: normal;
+  }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── Section: stat triplet ─── */
+  .triple-stat {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 120px 28px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+  @media (max-width: 860px) { .triple-stat { grid-template-columns: 1fr; padding: 60px 28px; } }
+  .triple-stat .ts {
+    padding: 32px 24px;
+    border-right: 1px solid var(--rule);
+  }
+  .triple-stat .ts:last-child { border-right: 0; }
+  @media (max-width: 860px) {
+    .triple-stat .ts { border-right: 0; border-bottom: 1px solid var(--rule); padding: 24px 0; }
+    .triple-stat .ts:last-child { border-bottom: 0; }
+  }
+  .triple-stat .ts-num {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(72px, 9vw, 132px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .triple-stat .ts-num em {
+    background: linear-gradient(135deg, var(--menstrual), var(--follicular) 60%, var(--luteal));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-style: italic;
+  }
+  .triple-stat .ts-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+  .triple-stat .ts-desc {
+    color: var(--ink-faint);
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  /* ─── Manifesto block ─── */
+  .manifesto {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 120px 28px;
+  }
+  .manifesto-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-faint);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .manifesto-eyebrow::before {
+    content: ''; width: 24px; height: 1px; background: var(--ink-faint);
+  }
+  .manifesto-text {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(28px, 4vw, 48px);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    max-width: 920px;
+  }
+  .manifesto-text p { margin-bottom: 32px; }
+  .manifesto-text em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .manifesto-text strong {
+    font-weight: 400;
+    color: var(--ink);
+    background: linear-gradient(180deg, transparent 60%, var(--highlight) 60%);
+    padding: 0 4px;
+  }
+
+  /* ─── Capabilities ─── */
+  .three-up-section {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 28px 120px;
+  }
+  .three-up {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  @media (max-width: 860px) { .three-up { grid-template-columns: 1fr; } }
+  .cap {
+    background: var(--paper);
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: relative;
+    transition: background 0.3s;
+  }
+  .cap:hover { background: var(--paper-deep); }
+  .cap-num {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 64px;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: -0.04em;
+  }
+  .cap h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .cap h3 em { font-style: italic; color: var(--accent); }
+  .cap p { color: var(--ink-soft); font-size: 15px; line-height: 1.6; }
+
+  /* ─── Audience strip ─── */
+  .audience-section {
+    background: var(--paper-deep);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 100px 28px;
+  }
+  .audience-inner { max-width: 1280px; margin: 0 auto; }
+  .audience-h {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    max-width: 880px;
+    margin-bottom: 16px;
+  }
+  .audience-h em { font-style: italic; color: var(--accent); }
+  .audience-sub { color: var(--ink-soft); font-size: 17px; line-height: 1.6; max-width: 660px; margin-bottom: 48px; }
+  .audience-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+  @media (max-width: 860px) { .audience-list { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .audience-list { grid-template-columns: 1fr; } }
+  .aud-card { border-left: 2px solid var(--rule); padding: 4px 0 4px 20px; }
+  .aud-card:nth-child(1) { border-color: var(--menstrual); }
+  .aud-card:nth-child(2) { border-color: var(--follicular); }
+  .aud-card:nth-child(3) { border-color: var(--ovulation); }
+  .aud-card:nth-child(4) { border-color: var(--luteal); }
+  .aud-card .name {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .aud-card .name em { font-style: italic; }
+  .aud-card .desc { color: var(--ink-soft); font-size: 14.5px; line-height: 1.55; }
+
+  /* ─── Privacy split ─── */
+  .privacy-pitch {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 120px 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  @media (max-width: 860px) { .privacy-pitch { grid-template-columns: 1fr; gap: 48px; } }
+  .privacy-pitch h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .privacy-pitch h2 em { font-style: italic; color: var(--accent); }
+  .privacy-pitch p {
+    color: var(--ink-soft);
+    font-size: 16.5px;
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+  .privacy-pitch ul {
+    list-style: none;
+    margin-top: 32px;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .privacy-pitch li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-soft);
+  }
+  .privacy-pitch li .verdict { color: var(--ovulation); font-weight: 500; }
+  .privacy-pitch li .verdict.no { color: var(--menstrual); }
+  .privacy-pitch .donut { width: 100%; max-width: 420px; margin: 0 auto; }
+
+  /* ─── CTA ─── */
+  .cta-section {
+    text-align: center;
+    padding: 140px 28px 80px;
+    max-width: 880px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .cta-section h2 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(36px, 5.2vw, 64px);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .cta-section h2 em {
+    background: linear-gradient(135deg, var(--menstrual), var(--follicular) 60%, var(--luteal));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-style: italic;
+  }
+  .cta-section .sub { color: var(--ink-soft); font-size: 17px; line-height: 1.6; margin-bottom: 40px; }
+
+  .cta-row {
+    display: inline-flex; gap: 4px;
+    border: 1px solid var(--rule); border-radius: 999px;
+    padding: 4px; background: var(--paper);
+  }
+  .cta-row a {
+    padding: 14px 24px; text-decoration: none;
+    font-family: var(--font-mono); font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.18em;
+    color: var(--ink-soft); border-radius: 999px;
+    transition: background 0.25s, color 0.25s;
+  }
+  .cta-row a.primary { background: var(--ink); color: var(--paper); }
+  .cta-row a:hover { background: var(--accent); color: var(--paper); }
+
+  .legal-note {
+    max-width: 760px; margin: 64px auto 0; padding: 24px 28px 0;
+    border-top: 1px solid var(--rule-soft); text-align: center;
+    font-family: var(--font-mono); font-size: 10.5px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--ink-faint); line-height: 1.7;
+  }
+  .legal-note a { color: var(--ink-soft); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ─── Reveal on scroll ─── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.9s, transform 0.9s; }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .headline .word, .reveal, .marquee { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+  }
+</style>
 </head>
 <body>
 
 <header class="topbar">
   <div class="topbar-inner">
-    <a href="/" class="brand">
+    <a href="./" class="brand">
       <span class="brand-mark"></span>
-      <span class="brand-name">CycleSync <em>· legal</em></span>
+      <span class="brand-name">CycleSync</span>
     </a>
     <nav class="topnav">
-      <a href="./" class="active">Index</a>
-      <a href="app/">The App</a>
-      <a href="science/">Science</a>
-      <a href="privacy/">Privacy</a>
-      <a href="terms/">Terms</a>
+      <a href="./" class="active" data-en="Home" data-es="Inicio">Home</a>
+      <a href="app/" data-en="The App" data-es="La App">The App</a>
+      <a href="science/" data-en="Science" data-es="Ciencia">Science</a>
+      <a href="privacy/" data-en="Privacy" data-es="Privacidad">Privacy</a>
+      <a href="terms/" data-en="Terms" data-es="Términos">Terms</a>
     </nav>
   </div>
 </header>
 
-<main class="hero">
-  <div class="hero-eyebrow">Legal · v1.0 · Effective on App Store launch</div>
-  <h1>The cycle affects <em>everything.</em><br>Your data affects <em>no one.</em></h1>
-  <p class="hero-lede">
-    CycleSync is a menstrual cycle wellness app for iPhone and Apple Watch. It builds a personalized map of how <em>your</em> cycle affects <em>your</em> body — symptoms, mood, energy, sleep, biometrics — by correlating your own data on your own device. Nothing is uploaded. There is no account. There is no backend. These pages document exactly what that means.
-  </p>
+<main>
 
-  <div class="doc-grid">
-    <a href="privacy/" class="doc-card">
-      <span class="doc-num">Document 01</span>
-      <span class="doc-title">Privacy <em>Policy</em></span>
-      <span class="doc-desc">What data we use, where it goes (nowhere), Apple HealthKit access, the one network exception (optional Gemma model download), and your GDPR / CCPA rights. EN · ES.</span>
-      <span class="doc-arrow">Read →</span>
-    </a>
-    <a href="terms/" class="doc-card">
-      <span class="doc-num">Document 02</span>
-      <span class="doc-title">Terms <em>of Use</em></span>
-      <span class="doc-desc">Wellness positioning (this is not a medical device), eligibility from age 13, license scope, no warranties, limitation of liability, governing law of Spain. EN · ES.</span>
-      <span class="doc-arrow">Read →</span>
-    </a>
-  </div>
+  <!-- ═══ CINEMATIC HERO ═══ -->
+  <section class="cinema" id="cinema">
+    <div>
+      <div class="eyebrow-wrap">
+        <div class="left" data-en="A Forge Labs product" data-es="Un producto de Forge Labs">A Forge Labs product</div>
+        <div class="right">
+          <span class="pulse"></span>
+          <span data-en="Coming 2026 to App Store" data-es="Disponible en 2026 en la App Store">Coming 2026 to App Store</span>
+        </div>
+      </div>
 
-  <section style="margin-top:96px; max-width:720px;">
-    <div class="hero-eyebrow">What we built</div>
-    <h2 style="font-family:var(--font-display); font-weight:300; font-size:36px; line-height:1.15; letter-spacing:-0.02em; margin-bottom:18px;">
-      A personal map of <em style="color:var(--accent); font-style:italic;">your</em> cycle, not a textbook average.
-    </h2>
-    <p style="color:var(--ink-soft); font-size:17px; line-height:1.7; margin-bottom:14px;">
-      The menstrual cycle modulates energy, mood, pain, sleep, cognition, skin, digestion, and more. Generic apps tell you what a "typical" cycle looks like. CycleSync uses on-device statistics — Pearson correlations, chi-squared tests, cyclicity detection — to show what <em>yours</em> actually does. After 14 days of data, patterns start to emerge. After three cycles, the map gets sharp.
-    </p>
-    <p style="color:var(--ink-soft); font-size:17px; line-height:1.7;">
-      Entry niches are menstrual migraine, PMDD, and perimenopause, but the underlying engine works for anyone who menstruates and wants to understand how their cycle and their body relate.
-    </p>
+      <h1 class="headline" id="headline"
+          data-en="Understand your <em>body</em> through your <span class='stroke'>cycle.</span>"
+          data-es="Entiende tu <em>cuerpo</em> a través de tu <span class='stroke'>ciclo.</span>">
+        Understand your <em>body</em> through your <span class="stroke">cycle.</span>
+      </h1>
+
+      <div class="sub-row">
+        <p class="sub-lede"
+           data-en="The menstrual cycle <em>changes everything</em>: how you sleep, think, feel, perform, recover. CycleSync builds a personal map of how <em>your</em> cycle affects <em>your</em> body — on your iPhone and Apple Watch, with on-device statistics, no cloud and no account."
+           data-es="El ciclo menstrual <em>lo cambia todo</em>: cómo duermes, piensas, sientes, rindes y te recuperas. CycleSync construye un mapa personal de cómo <em>tu</em> ciclo afecta a <em>tu</em> cuerpo — en tu iPhone y tu Apple Watch, con estadística en el dispositivo, sin nube y sin cuenta.">
+          The menstrual cycle <em>changes everything</em>: how you sleep, think, feel, perform, recover. CycleSync builds a personal map of how <em>your</em> cycle affects <em>your</em> body — on your iPhone and Apple Watch, with on-device statistics, no cloud and no account.
+        </p>
+        <div class="hero-cta-stack">
+          <div class="hero-cta-row">
+            <a href="app/" class="primary" data-en="Tour the app →" data-es="Ver la app →">Tour the app →</a>
+            <a href="science/" data-en="The science" data-es="La ciencia">The science</a>
+          </div>
+          <div class="hero-meta-min">
+            <span><strong>iOS 18+</strong></span>
+            <span><strong>watchOS 11+</strong></span>
+            <span><strong>EN · ES</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <section style="margin-top:80px; max-width:720px;">
-    <div class="hero-eyebrow">Why we made these choices</div>
-    <h2 style="font-family:var(--font-display); font-weight:300; font-size:36px; line-height:1.15; letter-spacing:-0.02em; margin-bottom:18px;">
-      Cycle data is among the most sensitive there is. <em style="color:var(--accent); font-style:italic;">It belongs on your device.</em>
-    </h2>
-    <p style="color:var(--ink-soft); font-size:17px; line-height:1.7; margin-bottom:14px;">
-      Period and reproductive data have been subpoenaed, sold, and weaponized in the last several years. We took the opposite stance from the start: there is no backend that <em>could</em> hand over your data, because it never leaves your phone. No accounts. No analytics SDKs. No advertising trackers. No third-party dependencies in the production app. The app builds with only Apple frameworks and a single optional model file you choose to download.
-    </p>
-    <p style="color:var(--ink-soft); font-size:17px; line-height:1.7;">
-      Privacy here is enforced by code, not by policy. A test in our build pipeline (<code>ForbiddenAPIScanTests</code>) fails the build if anyone tries to add a network call outside the one allowed path — the optional Gemma 3 4B model download from Hugging Face, which transfers model weights only and never user data. Read the Privacy Policy for the full disclosure.
-    </p>
+  <!-- ═══ MARQUEE ═══ -->
+  <section class="marquee-section" aria-hidden="true">
+    <div class="marquee" id="marqueeEN">
+      <span><em>Sleep</em></span><span><em>Mood</em></span><span><em>Energy</em></span><span><em>Migraine</em></span><span><em>Pain</em></span><span><em>Cognition</em></span><span><em>HRV</em></span><span><em>Temperature</em></span><span><em>Skin</em></span><span><em>Digestion</em></span><span><em>Performance</em></span><span><em>Recovery</em></span>
+      <span><em>Sleep</em></span><span><em>Mood</em></span><span><em>Energy</em></span><span><em>Migraine</em></span><span><em>Pain</em></span><span><em>Cognition</em></span><span><em>HRV</em></span><span><em>Temperature</em></span><span><em>Skin</em></span><span><em>Digestion</em></span><span><em>Performance</em></span><span><em>Recovery</em></span>
+    </div>
+    <div class="marquee" id="marqueeES" style="display:none;">
+      <span><em>Sueño</em></span><span><em>Ánimo</em></span><span><em>Energía</em></span><span><em>Migraña</em></span><span><em>Dolor</em></span><span><em>Cognición</em></span><span><em>HRV</em></span><span><em>Temperatura</em></span><span><em>Piel</em></span><span><em>Digestión</em></span><span><em>Rendimiento</em></span><span><em>Recuperación</em></span>
+      <span><em>Sueño</em></span><span><em>Ánimo</em></span><span><em>Energía</em></span><span><em>Migraña</em></span><span><em>Dolor</em></span><span><em>Cognición</em></span><span><em>HRV</em></span><span><em>Temperatura</em></span><span><em>Piel</em></span><span><em>Digestión</em></span><span><em>Rendimiento</em></span><span><em>Recuperación</em></span>
+    </div>
   </section>
 
-  <section style="margin-top:80px; max-width:720px;">
-    <div class="hero-eyebrow">What this is not</div>
-    <h2 style="font-family:var(--font-display); font-weight:300; font-size:36px; line-height:1.15; letter-spacing:-0.02em; margin-bottom:18px;">
-      A wellness reflection tool. <em style="color:var(--accent); font-style:italic;">Not a medical device.</em>
-    </h2>
-    <p style="color:var(--ink-soft); font-size:17px; line-height:1.7;">
-      CycleSync does not diagnose, treat, prevent, monitor, or cure any condition. It surfaces patterns — observed, historical, statistical — in language like "your data suggests" and "historically, day 23 has been one of your harder days." It is intended to support reflection, not to replace medical care. If you have symptoms that worry you, talk to a healthcare professional. The Terms of Use explain the legal scope of this in detail.
-    </p>
+  <!-- ═══ TRIPLE STAT ═══ -->
+  <section class="triple-stat">
+    <div class="ts reveal">
+      <div class="ts-num"><em>62</em><span style="font-family:var(--font-mono);font-size:0.32em;font-style:normal;letter-spacing:0.05em;color:var(--ink-faint);">%</span></div>
+      <div class="ts-label" data-en="Menstrual migraine" data-es="Migraña menstrual">Menstrual migraine</div>
+      <div class="ts-desc"
+           data-en="Of migraine sufferers report at least one cycle-linked attack each month. CycleSync helps you see <em style='font-family:var(--font-display);color:var(--ink);'>your</em> trigger window."
+           data-es="De las personas con migraña reporta al menos un ataque ligado al ciclo cada mes. CycleSync te ayuda a ver <em style='font-family:var(--font-display);color:var(--ink);'>tu</em> ventana de riesgo.">
+        Of migraine sufferers report at least one cycle-linked attack each month. CycleSync helps you see <em style="font-family:var(--font-display);color:var(--ink);">your</em> trigger window.
+      </div>
+    </div>
+    <div class="ts reveal" style="transition-delay: 0.15s;">
+      <div class="ts-num"><em>~85</em><span style="font-family:var(--font-mono);font-size:0.32em;font-style:normal;letter-spacing:0.05em;color:var(--ink-faint);">%</span></div>
+      <div class="ts-label" data-en="Have some PMS" data-es="Síndrome premenstrual">Have some PMS</div>
+      <div class="ts-desc"
+           data-en="Symptoms in the late luteal phase. The Cycle Map separates the cyclic from the random with statistical evidence — not vibes."
+           data-es="Síntomas en la fase lútea tardía. El Mapa del Ciclo separa lo cíclico de lo aleatorio con evidencia estadística — no a ojo.">
+        Symptoms in the late luteal phase. The Cycle Map separates the cyclic from the random with statistical evidence — not vibes.
+      </div>
+    </div>
+    <div class="ts reveal" style="transition-delay: 0.3s;">
+      <div class="ts-num"><em>0</em></div>
+      <div class="ts-label" data-en="Bytes leave your phone" data-es="Bytes salen del móvil">Bytes leave your phone</div>
+      <div class="ts-desc"
+           data-en="No backend. No account. No analytics SDKs. The build pipeline fails CI if anyone tries to add a network call. Privacy <em style='font-family:var(--font-display);color:var(--ink);'>by architecture</em>, not by promise."
+           data-es="Sin backend. Sin cuenta. Sin SDKs de analítica. La pipeline rompe CI si alguien intenta meter una llamada de red. Privacidad <em style='font-family:var(--font-display);color:var(--ink);'>por arquitectura</em>, no por promesa.">
+        No backend. No account. No analytics SDKs. The build pipeline fails CI if anyone tries to add a network call. Privacy <em style="font-family:var(--font-display);color:var(--ink);">by architecture</em>, not by promise.
+      </div>
+    </div>
   </section>
 
-  <div class="phase-strip">
-    <span title="Menstrual"></span>
-    <span title="Follicular"></span>
-    <span title="Ovulation"></span>
-    <span title="Luteal"></span>
-  </div>
-  <div class="phase-legend">
-    <span>Menstrual · 1–5</span>
-    <span>Follicular · 6–13</span>
-    <span>Ovulation · 14</span>
-    <span>Luteal · 15–28</span>
-  </div>
+  <!-- ═══ MANIFESTO ═══ -->
+  <section class="manifesto">
+    <div class="manifesto-eyebrow" data-en="Manifesto" data-es="Manifiesto">Manifesto</div>
+    <div class="manifesto-text reveal">
+      <p data-en="Every menstruating body is <em>different</em>. Generic period apps show you a textbook average — a fictional 28-day cycle that doesn't belong to anyone."
+         data-es="Cada cuerpo que menstrúa es <em>distinto</em>. Las apps de regla genéricas te enseñan un promedio de manual — un ciclo ficticio de 28 días que no es de nadie.">
+        Every menstruating body is <em>different</em>. Generic period apps show you a textbook average — a fictional 28-day cycle that doesn't belong to anyone.
+      </p>
+      <p data-en="CycleSync starts from the opposite end. We treat <strong>your data as the only source of truth</strong>. The engine watches your symptoms, your biometrics, your sleep, your mood — and draws a map that's only true for you."
+         data-es="CycleSync parte del extremo contrario. Tratamos <strong>tus datos como la única fuente de verdad</strong>. El motor observa tus síntomas, tu biometría, tu sueño, tu ánimo — y dibuja un mapa que solo es cierto para ti.">
+        CycleSync starts from the opposite end. We treat <strong>your data as the only source of truth</strong>. The engine watches your symptoms, your biometrics, your sleep, your mood — and draws a map that's only true for you.
+      </p>
+      <p data-en="That map stays on your device. <em>Forever.</em> Because cycle data is among the most sensitive there is — and the simplest defense is to never have it leave your phone in the first place."
+         data-es="Ese mapa se queda en tu dispositivo. <em>Siempre.</em> Porque los datos de ciclo están entre los más sensibles que existen — y la defensa más simple es que nunca salgan de tu móvil para empezar.">
+        That map stays on your device. <em>Forever.</em> Because cycle data is among the most sensitive there is — and the simplest defense is to never have it leave your phone in the first place.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══ CAPABILITIES ═══ -->
+  <section class="three-up-section">
+    <div class="manifesto-eyebrow" data-en="What CycleSync does" data-es="Qué hace CycleSync">What CycleSync does</div>
+    <div class="three-up reveal">
+      <div class="cap">
+        <span class="cap-num">01</span>
+        <h3 data-en="Your <em>personal cycle map</em>" data-es="Tu <em>mapa personal del ciclo</em>">Your <em>personal cycle map</em></h3>
+        <p data-en="Symptoms, mood, energy and sleep overlaid onto your phases. After three cycles, the patterns sharpen. After six, it's a tool no generic app can match — because no generic app sees <em>your</em> body."
+           data-es="Síntomas, ánimo, energía y sueño superpuestos a tus fases. Tras tres ciclos, los patrones se afilan. Tras seis, es una herramienta que ninguna app genérica puede igualar — porque ninguna app genérica ve <em>tu</em> cuerpo.">Symptoms, mood, energy and sleep overlaid onto your phases. After three cycles, the patterns sharpen. After six, it's a tool no generic app can match — because no generic app sees <em>your</em> body.</p>
+      </div>
+      <div class="cap">
+        <span class="cap-num">02</span>
+        <h3 data-en="A <em>statistical engine</em>, not a vibe" data-es="Un <em>motor estadístico</em>, no una intuición">A <em>statistical engine</em>, not a vibe</h3>
+        <p data-en="Pearson correlations, chi-squared independence tests, cyclicity detection. Built with Apple's Accelerate framework, gated at <code>p &lt; 0.05</code>. If a pattern isn't significant, the engine stays quiet."
+           data-es="Correlaciones de Pearson, pruebas chi-cuadrado de independencia, detección de ciclicidad. Construido con Accelerate de Apple, filtrado a <code>p &lt; 0,05</code>. Si un patrón no es significativo, el motor calla.">Pearson correlations, chi-squared independence tests, cyclicity detection. Built with Apple's Accelerate framework, gated at <code>p &lt; 0.05</code>. If a pattern isn't significant, the engine stays quiet.</p>
+      </div>
+      <div class="cap">
+        <span class="cap-num">03</span>
+        <h3 data-en="Apple Watch <em>in the loop</em>" data-es="Apple Watch <em>en el bucle</em>">Apple Watch <em>in the loop</em></h3>
+        <p data-en="HRV, sleep, temperature, resting heart rate — read from HealthKit, correlated with your phase. A native watchOS app and complications for quick logging without reaching for your phone."
+           data-es="HRV, sueño, temperatura, frecuencia cardíaca en reposo — leídas de HealthKit y correlacionadas con tu fase. Una app nativa de watchOS con complicaciones para registrar al vuelo sin sacar el móvil.">HRV, sleep, temperature, resting heart rate — read from HealthKit, correlated with your phase. A native watchOS app and complications for quick logging without reaching for your phone.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ AUDIENCE ═══ -->
+  <section class="audience-section">
+    <div class="audience-inner">
+      <div class="manifesto-eyebrow" data-en="Built for" data-es="Pensada para">Built for</div>
+      <h2 class="audience-h reveal"
+          data-en="Anyone who menstruates and wants their cycle to <em>make sense.</em>"
+          data-es="Cualquier mujer que menstrúe y quiera que su ciclo <em>tenga sentido.</em>">
+        Anyone who menstruates and wants their cycle to <em>make sense.</em>
+      </h2>
+      <p class="audience-sub"
+         data-en="We built CycleSync starting from three communities where the cycle effect is impossible to ignore — but the engine works for everyone."
+         data-es="Empezamos CycleSync desde tres comunidades donde el efecto del ciclo es imposible de ignorar — pero el motor funciona para cualquiera.">We built CycleSync starting from three communities where the cycle effect is impossible to ignore — but the engine works for everyone.</p>
+      <div class="audience-list">
+        <div class="aud-card reveal">
+          <div class="name" data-en="Menstrual <em>migraine</em>" data-es="Migraña <em>menstrual</em>">Menstrual <em>migraine</em></div>
+          <div class="desc"
+               data-en="62% of migraineurs report cycle-linked attacks. Map your trigger window — and the biometrics that drift before it."
+               data-es="El 62% de quienes sufren migraña reporta ataques ligados al ciclo. Mapea tu ventana de riesgo — y las señales biométricas que se desvían antes.">62% of migraineurs report cycle-linked attacks. Map your trigger window — and the biometrics that drift before it.</div>
+        </div>
+        <div class="aud-card reveal" style="transition-delay: 0.1s;">
+          <div class="name" data-en="<em>PMDD</em>" data-es="<em>TDPM</em>">PMDD</div>
+          <div class="desc"
+               data-en="3–8% of women, often dismissed for years. The Cycle Map distinguishes hormonal symptoms from random ones with statistical evidence."
+               data-es="Entre el 3% y el 8% de las mujeres, frecuentemente desatendido durante años. El Mapa del Ciclo distingue síntomas hormonales de los aleatorios con evidencia estadística.">3–8% of women, often dismissed for years. The Cycle Map distinguishes hormonal symptoms from random ones with statistical evidence.</div>
+        </div>
+        <div class="aud-card reveal" style="transition-delay: 0.2s;">
+          <div class="name" data-en="<em>Perimenopause</em>" data-es="<em>Perimenopausia</em>">Perimenopause</div>
+          <div class="desc"
+               data-en="Cycles get irregular. Symptoms compound. CycleSync tracks the change as it happens, in your own data, with your own baseline."
+               data-es="Los ciclos se vuelven irregulares. Los síntomas se acumulan. CycleSync registra el cambio según ocurre, con tus propios datos y tu propia línea base.">Cycles get irregular. Symptoms compound. CycleSync tracks the change as it happens, in your own data, with your own baseline.</div>
+        </div>
+        <div class="aud-card reveal" style="transition-delay: 0.3s;">
+          <div class="name" data-en="Anyone <em>curious</em>" data-es="Curiosidad <em>propia</em>">Anyone <em>curious</em></div>
+          <div class="desc"
+               data-en="Energy, sleep, performance, cognition, skin, digestion — all phase-modulated. If you menstruate and want the map, the map is here."
+               data-es="Energía, sueño, rendimiento, cognición, piel, digestión — todo se modula por fases. Si menstrúas y quieres el mapa, el mapa está aquí.">Energy, sleep, performance, cognition, skin, digestion — all phase-modulated. If you menstruate and want the map, the map is here.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PRIVACY PITCH ═══ -->
+  <section class="privacy-pitch">
+    <div>
+      <div class="manifesto-eyebrow" data-en="Privacy by architecture" data-es="Privacidad por arquitectura">Privacy by architecture</div>
+      <h2 data-en="Cycle data <em>stays on your phone.</em>"
+          data-es="Tus datos de ciclo <em>se quedan en tu móvil.</em>">Cycle data <em>stays on your phone.</em></h2>
+      <p data-en="Period and reproductive data has been subpoenaed, sold, and weaponised in recent years. We took the opposite stance from line one of code: <em style='font-family:var(--font-display); color:var(--ink); font-style:italic;'>there is no backend</em>. There can't be a leak from a server that doesn't exist."
+         data-es="En los últimos años los datos de regla y salud reproductiva se han usado bajo orden judicial, vendido y convertido en arma. Tomamos la postura contraria desde la primera línea de código: <em style='font-family:var(--font-display); color:var(--ink); font-style:italic;'>no hay backend</em>. No puede haber filtración de un servidor que no existe.">Period and reproductive data has been subpoenaed, sold, and weaponised in recent years. We took the opposite stance from line one of code: <em style="font-family:var(--font-display); color:var(--ink); font-style:italic;">there is no backend</em>. There can't be a leak from a server that doesn't exist.</p>
+      <ul>
+        <li><span data-en="Account required" data-es="Cuenta obligatoria">Account required</span> <span class="verdict no" data-en="No" data-es="No">No</span></li>
+        <li><span data-en="Cloud sync of cycle data" data-es="Sincronización en la nube">Cloud sync of cycle data</span> <span class="verdict no" data-en="No" data-es="No">No</span></li>
+        <li><span data-en="Analytics SDK" data-es="SDK de analítica">Analytics SDK</span> <span class="verdict no" data-en="No" data-es="No">No</span></li>
+        <li><span data-en="Advertising trackers" data-es="Rastreadores de publicidad">Advertising trackers</span> <span class="verdict no" data-en="No" data-es="No">No</span></li>
+        <li><span data-en="Data sold or shared" data-es="Datos vendidos o cedidos">Data sold or shared</span> <span class="verdict no" data-en="No" data-es="No">No</span></li>
+        <li><span data-en="HealthKit access" data-es="Acceso a HealthKit">HealthKit access</span> <span class="verdict" data-en="Read-only" data-es="Solo lectura">Read-only</span></li>
+        <li><span data-en="Where AI runs" data-es="Dónde corre la IA">Where AI runs</span> <span class="verdict" data-en="On-device" data-es="En el dispositivo">On-device</span></li>
+      </ul>
+    </div>
+    <div>
+      <svg class="donut" viewBox="-260 -260 520 520" role="img"
+           data-i18n-attr="aria-label"
+           data-aria-label-en="On-device versus network"
+           data-aria-label-es="En el dispositivo frente a red"
+           aria-label="On-device versus network">
+        <g transform="rotate(-90)">
+          <circle r="180" fill="none" stroke="var(--rule)" stroke-width="48"/>
+          <circle r="180" fill="none" stroke="var(--ovulation)" stroke-width="48" stroke-dasharray="1120 11"/>
+          <circle r="180" fill="none" stroke="var(--menstrual)" stroke-width="48" stroke-dasharray="11 1120" stroke-dashoffset="-1120"/>
+        </g>
+        <text x="0" y="-12" text-anchor="middle" font-family="Fraunces" font-style="italic" font-weight="300" font-size="56" fill="var(--ink)" letter-spacing="-2">99<tspan font-size="36">%</tspan></text>
+        <text x="0" y="22" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="var(--ink-faint)" letter-spacing="3"
+              data-en="STAYS ON DEVICE" data-es="EN EL DISPOSITIVO">STAYS ON DEVICE</text>
+        <text x="0" y="48" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="var(--ink-faint)" letter-spacing="2"
+              data-en="FOREVER" data-es="SIEMPRE">FOREVER</text>
+        <g font-family="JetBrains Mono" font-size="10" letter-spacing="1.5">
+          <text x="0" y="-218" fill="var(--ovulation)" text-anchor="middle"
+                data-en="YOUR DATA · 100%" data-es="TUS DATOS · 100%">YOUR DATA · 100%</text>
+          <text x="0" y="232" fill="var(--menstrual)" text-anchor="middle"
+                data-en="OPT-IN MODEL DOWNLOAD · 1%" data-es="DESCARGA OPCIONAL DEL MODELO · 1%">OPT-IN MODEL DOWNLOAD · 1%</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ═══ CTA ═══ -->
+  <section class="cta-section">
+    <h2 data-en="The cycle <em>affects everything.</em><br>Your data <em>affects no one.</em>"
+        data-es="El ciclo <em>afecta a todo.</em><br>Tus datos <em>no afectan a nadie.</em>">
+      The cycle <em>affects everything.</em><br>Your data <em>affects no one.</em>
+    </h2>
+    <p class="sub" data-en="Coming 2026 to the App Store for iPhone and Apple Watch."
+                   data-es="Disponible en 2026 en la App Store para iPhone y Apple Watch.">Coming 2026 to the App Store for iPhone and Apple Watch.</p>
+    <div class="cta-row">
+      <a href="app/" class="primary" data-en="Tour the app →" data-es="Ver la app →">Tour the app →</a>
+      <a href="science/" data-en="Read the science" data-es="Leer la ciencia">Read the science</a>
+      <a href="privacy/" data-en="Privacy commitments" data-es="Compromisos de privacidad">Privacy commitments</a>
+    </div>
+
+    <div class="legal-note">
+      <span data-en="CycleSync is a wellness app for personal reflection — not a medical device."
+            data-es="CycleSync es una app de bienestar para reflexión personal — no es un producto sanitario.">CycleSync is a wellness app for personal reflection — not a medical device.</span><br>
+      <span data-en="For details, see our" data-es="Para más detalle, consulta nuestros">For details, see our</span>
+      <a href="terms/" data-en="Terms of Use" data-es="Términos de Uso">Terms of Use</a>
+      <span data-en="and" data-es="y nuestra">and</span>
+      <a href="privacy/" data-en="Privacy Policy" data-es="Política de Privacidad">Privacy Policy</a>.
+    </div>
+  </section>
+
 </main>
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div>© 2026 Roberto Rojo Sahuquillo · Made in Spain</div>
+    <div data-en="© 2026 Forge Labs · Crafted in Alicante, Spain"
+         data-es="© 2026 Forge Labs · Hecho en Alicante, España">© 2026 Forge Labs · Crafted in Alicante, Spain</div>
     <div>
-      <a href="privacy/">Privacy</a>
-      <a href="terms/">Terms</a>
-      <a href="mailto:rrojo.va@gmail.com">Contact</a>
+      <a href="app/" data-en="The App" data-es="La App">The App</a>
+      <a href="science/" data-en="Science" data-es="Ciencia">Science</a>
+      <a href="privacy/" data-en="Privacy" data-es="Privacidad">Privacy</a>
+      <a href="terms/" data-en="Terms" data-es="Términos">Terms</a>
+      <a href="mailto:rrojo.va@gmail.com" data-en="Contact" data-es="Contacto">Contact</a>
     </div>
   </div>
 </footer>
+
+<script src="assets/i18n.js"></script>
+<script>
+  // ── 1. Animated headline: split into words with stagger
+  (function () {
+    function splitHeadline() {
+      const h = document.getElementById('headline');
+      if (!h) return;
+      // Walk and wrap top-level text segments and inline elements as .word spans
+      const wrap = document.createElement('div');
+      wrap.innerHTML = h.innerHTML;
+      const out = [];
+      wrap.childNodes.forEach((n) => {
+        if (n.nodeType === 3) {
+          n.textContent.split(/\s+/).filter(Boolean).forEach((w) => out.push({ html: w, isEl: false }));
+        } else {
+          out.push({ html: n.outerHTML, isEl: true });
+        }
+      });
+      h.innerHTML = out.map((seg, i) => {
+        const delay = (0.08 + i * 0.07).toFixed(2) + 's';
+        return `<span class="word" style="animation-delay:${delay};">${seg.html}</span>`;
+      }).join(' ');
+    }
+    splitHeadline();
+    // Re-run on language change
+    new MutationObserver(splitHeadline).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  })();
+
+  // ── 2. Cursor-following gradient mesh
+  (function () {
+    const cinema = document.getElementById('cinema');
+    if (!cinema || matchMedia('(hover: none)').matches) return;
+    cinema.addEventListener('pointermove', (e) => {
+      const r = cinema.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width) * 100;
+      const y = ((e.clientY - r.top) / r.height) * 100;
+      cinema.style.setProperty('--mx', x.toFixed(1) + '%');
+      cinema.style.setProperty('--my', y.toFixed(1) + '%');
+    });
+  })();
+
+  // ── 3. Reveal on scroll
+  (function () {
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  })();
+
+  // ── 4. Marquee swap on language change
+  (function () {
+    function swap() {
+      const lang = document.documentElement.lang;
+      document.getElementById('marqueeEN').style.display = lang === 'en' ? '' : 'none';
+      document.getElementById('marqueeES').style.display = lang === 'es' ? '' : 'none';
+    }
+    swap();
+    new MutationObserver(swap).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  })();
+</script>
 
 </body>
 </html>

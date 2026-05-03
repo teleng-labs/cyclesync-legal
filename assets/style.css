@@ -572,6 +572,51 @@ main, header, footer { position: relative; z-index: 2; }
 }
 .footer-inner a:hover { color: var(--accent); }
 
+/* ─── Floating language switcher ─── */
+.lang-switch {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: color-mix(in srgb, var(--paper) 90%, transparent);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 24px -10px rgba(0,0,0,0.18);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.lang-switch:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px -12px rgba(0,0,0,0.22);
+}
+.lang-switch button {
+  background: transparent;
+  border: 0;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: var(--ink-faint);
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  transition: color 0.2s;
+}
+.lang-switch button:hover { color: var(--ink); }
+.lang-switch button.active { color: var(--accent); font-weight: 500; }
+.lang-switch .sep { color: var(--ink-faint); opacity: 0.5; }
+@media (max-width: 480px) {
+  .lang-switch { bottom: 16px; right: 16px; padding: 6px 10px; font-size: 10px; }
+}
+
 /* selection */
 ::selection { background: var(--accent); color: var(--paper); }
 

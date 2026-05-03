@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Render the two legal markdown files into the final two HTML pages.
+"""Render the two legal markdown files into the final HTML pages.
 Splits each doc by `---` into English / Spanish, parses sections under ##,
 extracts ### items into TOC + numbered headings.
+The output is bilingual; the global i18n.js toggle hides/shows whichever language.
 """
 import re
 from pathlib import Path
@@ -13,22 +14,30 @@ PAGES = [
     {
         "src": "_PRIVACY_POLICY.md",
         "dst": "privacy/index.html",
-        "kicker": "Document 01 · Effective on App Store launch",
+        "kicker_en": "Document 01 · Effective on App Store launch",
+        "kicker_es": "Documento 01 · Vigente desde el lanzamiento en App Store",
         "title_en": "Privacy <em>Policy</em>",
         "title_es": "Pol&iacute;tica de <em>Privacidad</em>",
-        "title_seo": "Privacy Policy · CycleSync",
-        "desc_seo": "CycleSync Privacy Policy. 100% on-device wellness app. No backend, no accounts, no analytics, no tracking.",
+        "title_seo_en": "Privacy Policy · CycleSync",
+        "title_seo_es": "Política de Privacidad · CycleSync",
+        "desc_seo_en": "CycleSync Privacy Policy. 100% on-device wellness app. No backend, no accounts, no analytics, no tracking.",
+        "desc_seo_es": "Política de Privacidad de CycleSync. App de bienestar 100% en el dispositivo. Sin backend, sin cuentas, sin analítica, sin tracking.",
         "back_root": "../",
+        "is_privacy": True,
     },
     {
         "src": "_TERMS_OF_USE.md",
         "dst": "terms/index.html",
-        "kicker": "Document 02 · Effective on App Store launch",
+        "kicker_en": "Document 02 · Effective on App Store launch",
+        "kicker_es": "Documento 02 · Vigente desde el lanzamiento en App Store",
         "title_en": "Terms <em>of Use</em>",
         "title_es": "T&eacute;rminos <em>de Uso</em>",
-        "title_seo": "Terms of Use · CycleSync",
-        "desc_seo": "CycleSync Terms of Use. Wellness positioning, eligibility, license, limitation of liability, governing law of Spain.",
+        "title_seo_en": "Terms of Use · CycleSync",
+        "title_seo_es": "Términos de Uso · CycleSync",
+        "desc_seo_en": "CycleSync Terms of Use. Wellness positioning, eligibility, license, limitation of liability, governing law of Spain.",
+        "desc_seo_es": "Términos de Uso de CycleSync. Posicionamiento de bienestar, elegibilidad, licencia, limitación de responsabilidad, ley aplicable de España.",
         "back_root": "../",
+        "is_privacy": False,
     },
 ]
 
@@ -43,7 +52,7 @@ def inline(text: str) -> str:
 
 
 def parse_section(md: str):
-    """Split a single-language section by ### headings. Return list of {num,title,html}."""
+    """Split a single-language section by ### headings."""
     blocks = re.split(r"^### ", md, flags=re.M)
     intro = blocks[0].strip()
     items = []
@@ -62,7 +71,6 @@ def parse_section(md: str):
 
 
 def render_body(md: str) -> str:
-    """Tiny markdown → HTML for the body of a section. Supports paragraphs, bullet lists, inline code."""
     lines = md.splitlines()
     out = []
     i = 0
@@ -78,7 +86,6 @@ def render_body(md: str) -> str:
                 i += 1
             out.append("</ul>")
             continue
-        # paragraph: collect until blank line
         para = [line]
         i += 1
         while i < len(lines) and lines[i].strip() and not lines[i].startswith("- ") and not lines[i].startswith("### "):
@@ -109,15 +116,26 @@ def render_toc(items, slug_prefix):
     return "<ol>\n" + "\n".join(lis) + "\n</ol>"
 
 
+# Note: the doc body uses `lang-section` blocks marked data-lang-section="en"/"es".
+# A small inline script (also in this template) syncs visibility with the global cs-lang.
 TEMPLATE = """<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{title_seo}</title>
-<meta name="description" content="{desc_seo}">
+<title data-en="{title_seo_en}" data-es="{title_seo_es}">{title_seo_en}</title>
+<meta name="description"
+      data-i18n-attr="content"
+      data-content-en="{desc_seo_en}"
+      data-content-es="{desc_seo_es}"
+      content="{desc_seo_en}">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23c8324b' stroke-width='14' stroke-dasharray='66 198'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="{back_root}assets/style.css">
+<style>
+  /* Hide whichever language is not active. The global toggle sets <html lang>. */
+  html[lang="en"] [data-lang-section="es"] {{ display: none; }}
+  html[lang="es"] [data-lang-section="en"] {{ display: none; }}
+</style>
 </head>
 <body>
 
@@ -125,14 +143,14 @@ TEMPLATE = """<!doctype html>
   <div class="topbar-inner">
     <a href="{back_root}" class="brand">
       <span class="brand-mark"></span>
-      <span class="brand-name">CycleSync <em>· legal</em></span>
+      <span class="brand-name">CycleSync</span>
     </a>
     <nav class="topnav">
-      <a href="{back_root}">Index</a>
-      <a href="{back_root}app/">The App</a>
-      <a href="{back_root}science/">Science</a>
-      <a href="{back_root}privacy/" {privacy_active}>Privacy</a>
-      <a href="{back_root}terms/" {terms_active}>Terms</a>
+      <a href="{back_root}" data-en="Home" data-es="Inicio">Home</a>
+      <a href="{back_root}app/" data-en="The App" data-es="La App">The App</a>
+      <a href="{back_root}science/" data-en="Science" data-es="Ciencia">Science</a>
+      <a href="{back_root}privacy/" {privacy_active} data-en="Privacy" data-es="Privacidad">Privacy</a>
+      <a href="{back_root}terms/" {terms_active} data-en="Terms" data-es="Términos">Terms</a>
     </nav>
   </div>
 </header>
@@ -140,37 +158,32 @@ TEMPLATE = """<!doctype html>
 <main class="doc-shell">
   <div class="doc-header">
     <div class="doc-header-left">
-      <div class="doc-kicker">{kicker}</div>
-      <h1 class="doc-h1" id="doc-title-en">{title_en}</h1>
-      <h1 class="doc-h1" id="doc-title-es" style="display:none;">{title_es}</h1>
-      <div class="lang-tabs" role="tablist">
-        <button data-lang="en" class="active" role="tab">English</button>
-        <button data-lang="es" role="tab">Espa&ntilde;ol</button>
-      </div>
+      <div class="doc-kicker" data-en="{kicker_en}" data-es="{kicker_es}">{kicker_en}</div>
+      <h1 class="doc-h1" data-en="{title_en}" data-es="{title_es}">{title_en}</h1>
     </div>
     <div class="doc-meta">
       <strong>CycleSync</strong> · v1.0<br>
-      Roberto Rojo Sahuquillo<br>
-      Madrid &middot; Spain
+      Forge Labs<br>
+      <span data-en="Alicante · Spain" data-es="Alicante · España">Alicante · Spain</span>
     </div>
   </div>
 
   <aside class="doc-toc" aria-label="Table of contents">
-    <div data-lang-block="en">
+    <div data-lang-section="en">
       <h4>On this page</h4>
       {toc_en}
     </div>
-    <div data-lang-block="es" style="display:none;">
-      <h4>En esta p&aacute;gina</h4>
+    <div data-lang-section="es">
+      <h4>En esta página</h4>
       {toc_es}
     </div>
   </aside>
 
   <article class="doc-body">
-    <section class="lang-section active" data-lang="en">
+    <section data-lang-section="en">
       {body_en}
     </section>
-    <section class="lang-section" data-lang="es">
+    <section data-lang-section="es">
       {body_es}
     </section>
   </article>
@@ -178,37 +191,20 @@ TEMPLATE = """<!doctype html>
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div>&copy; 2026 Roberto Rojo Sahuquillo &middot; Made in Spain</div>
+    <div data-en="© 2026 Forge Labs · Crafted in Alicante, Spain"
+         data-es="© 2026 Forge Labs · Hecho en Alicante, España">© 2026 Forge Labs · Crafted in Alicante, Spain</div>
     <div>
-      <a href="{back_root}privacy/">Privacy</a>
-      <a href="{back_root}terms/">Terms</a>
-      <a href="mailto:rrojo.va@gmail.com">Contact</a>
+      <a href="{back_root}" data-en="Home" data-es="Inicio">Home</a>
+      <a href="{back_root}app/" data-en="The App" data-es="La App">The App</a>
+      <a href="{back_root}science/" data-en="Science" data-es="Ciencia">Science</a>
+      <a href="{back_root}privacy/" data-en="Privacy" data-es="Privacidad">Privacy</a>
+      <a href="{back_root}terms/" data-en="Terms" data-es="Términos">Terms</a>
+      <a href="mailto:rrojo.va@gmail.com" data-en="Contact" data-es="Contacto">Contact</a>
     </div>
   </div>
 </footer>
 
-<script>
-  (function () {{
-    const tabs = document.querySelectorAll('.lang-tabs button');
-    const sections = document.querySelectorAll('.lang-section');
-    const tocBlocks = document.querySelectorAll('[data-lang-block]');
-    const titleEN = document.getElementById('doc-title-en');
-    const titleES = document.getElementById('doc-title-es');
-    function setLang(l) {{
-      tabs.forEach(t => t.classList.toggle('active', t.dataset.lang === l));
-      sections.forEach(s => s.classList.toggle('active', s.dataset.lang === l));
-      tocBlocks.forEach(b => b.style.display = b.dataset.langBlock === l ? '' : 'none');
-      titleEN.style.display = l === 'en' ? '' : 'none';
-      titleES.style.display = l === 'es' ? '' : 'none';
-      document.documentElement.lang = l;
-      try {{ localStorage.setItem('cs-legal-lang', l); }} catch (e) {{}}
-    }}
-    tabs.forEach(t => t.addEventListener('click', () => setLang(t.dataset.lang)));
-    let saved = 'en';
-    try {{ saved = localStorage.getItem('cs-legal-lang') || (navigator.language.startsWith('es') ? 'es' : 'en'); }} catch (e) {{}}
-    setLang(saved);
-  }})();
-</script>
+<script src="{back_root}assets/i18n.js"></script>
 
 </body>
 </html>
@@ -217,14 +213,12 @@ TEMPLATE = """<!doctype html>
 
 def build_page(cfg):
     src = (ROOT / cfg["src"]).read_text(encoding="utf-8")
-    # Split by `---` divider between EN and ES
     parts = re.split(r"^---\s*$", src, flags=re.M)
     if len(parts) < 2:
         raise SystemExit(f"{cfg['src']}: expected EN ---  ES separator")
     en_md = parts[0]
     es_md = parts[1]
 
-    # Drop the leading `# Title` and `## English` / `## Español` headers; we provide our own.
     def clean(md):
         md = re.sub(r"^# .*$", "", md, count=1, flags=re.M)
         md = re.sub(r"^## .*$", "", md, count=1, flags=re.M)
@@ -238,16 +232,18 @@ def build_page(cfg):
     toc_en = render_toc(items_en, "en")
     toc_es = render_toc(items_es, "es")
 
-    is_privacy = "privacy" in cfg["dst"]
     html = TEMPLATE.format(
-        title_seo=cfg["title_seo"],
-        desc_seo=cfg["desc_seo"],
+        title_seo_en=cfg["title_seo_en"],
+        title_seo_es=cfg["title_seo_es"],
+        desc_seo_en=cfg["desc_seo_en"],
+        desc_seo_es=cfg["desc_seo_es"],
         back_root=cfg["back_root"],
-        kicker=cfg["kicker"],
+        kicker_en=cfg["kicker_en"],
+        kicker_es=cfg["kicker_es"],
         title_en=cfg["title_en"],
         title_es=cfg["title_es"],
-        privacy_active='class="active"' if is_privacy else "",
-        terms_active='class="active"' if not is_privacy else "",
+        privacy_active='class="active"' if cfg["is_privacy"] else "",
+        terms_active='class="active"' if not cfg["is_privacy"] else "",
         toc_en=toc_en,
         toc_es=toc_es,
         body_en=body_en,
