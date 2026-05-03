@@ -194,6 +194,8 @@
     gap: 64px;
     white-space: nowrap;
     animation: scroll 50s linear infinite;
+    animation-play-state: running !important;
+    will-change: transform;
     font-family: var(--font-display);
     font-style: italic;
     font-weight: 300;
@@ -508,7 +510,8 @@
   .reveal.in { opacity: 1; transform: translateY(0); }
 
   @media (prefers-reduced-motion: reduce) {
-    .headline .word, .reveal, .marquee { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+    .headline .word, .reveal { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+    /* Marquee keeps scrolling — it's slow decorative motion */
   }
 </style>
 </head>

@@ -692,15 +692,18 @@ body { overflow-x: clip; }
 .lang-switch button.active { color: var(--accent); font-weight: 500; }
 .lang-switch .sep { color: var(--ink-faint); opacity: 0.5; }
 @media (max-width: 760px) {
-  .lang-switch {
-    bottom: 14px;
-    right: auto;
-    left: 14px;
-    padding: 6px 12px;
-    font-size: 10px;
-    box-shadow: 0 6px 16px -8px rgba(0,0,0,0.2);
+  /* Hide the floating switcher; we'll add an inline one inside the mobile menu */
+  .lang-switch { display: none; }
+  /* Mobile menu shows the lang switch pinned at the top */
+  .topnav .lang-switch {
+    display: inline-flex;
+    position: static;
+    align-self: flex-end;
+    margin-bottom: 12px;
+    background: var(--paper-deep);
+    box-shadow: none;
+    border-color: var(--rule);
   }
-  .lang-switch button { padding: 3px 6px; }
 }
 
 /* selection */
@@ -738,9 +741,11 @@ body { overflow-x: clip; }
 .doc-toc { animation: rise 0.7s ease both; animation-delay: 0.2s; }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *:not(.marquee), *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  /* Marquee keeps scrolling — slow decorative motion, exempt from reduce-motion */
+  .marquee { animation-duration: 50s !important; }
 }
