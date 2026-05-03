@@ -130,7 +130,7 @@ TEMPLATE = """<!doctype html>
       data-content-es="{desc_seo_es}"
       content="{desc_seo_en}">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='42' fill='none' stroke='%23c8324b' stroke-width='14' stroke-dasharray='66 198'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="{back_root}assets/style.css?v=1777836658">
+<link rel="stylesheet" href="{back_root}assets/style.css?v=1777836911">
 <style>
   /* Hide whichever language is not active. The global toggle sets <html lang>. */
   html[lang="en"] [data-lang-section="es"] {{ display: none; }}
@@ -205,7 +205,7 @@ TEMPLATE = """<!doctype html>
   </div>
 </footer>
 
-<script src="{back_root}assets/i18n.js?v=1777836658"></script>
+<script src="{back_root}assets/i18n.js?v=1777836911"></script>
 
 </body>
 </html>
